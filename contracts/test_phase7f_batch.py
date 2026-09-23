@@ -1,4 +1,4 @@
-"""
+﻿"""
 Phase 7F Test Suite: Spring Batch Offline Analytics & Auditing Verification
 Tests:
 1. REST Endpoints Availability & Health (Gateways, Batch status, Reports)
@@ -58,7 +58,7 @@ def http_post(endpoint, data=None):
         return resp.getcode(), json.loads(content) if content else {}
 
 def run_mysql_query(sql):
-    cmd = f'docker exec releasemind-mysql mysql -uroot -proot_secret_change_me trustabac_iot -N -e "{sql}"'
+    cmd = f'docker exec trustabac-mysql mysql -uroot -proot_secret_change_me trustabac_iot -N -e "{sql}"'
     res = subprocess.run(cmd, shell=True, capture_output=True, text=True)
     return res.stdout.strip()
 

@@ -1,4 +1,4 @@
-"""
+﻿"""
 Phase 8A: Research Experimental Evaluation & Benchmarking Framework
 Executes 8 controlled empirical scenarios against TrustABAC-IoT:
 1. NORMAL_ACCESS
@@ -57,7 +57,7 @@ def http_post(endpoint, data=None):
         return resp.getcode(), json.loads(content) if content else {}
 
 def run_mysql_query(sql):
-    cmd = f'docker exec releasemind-mysql mysql -uroot -proot_secret_change_me trustabac_iot -N -e "{sql}"'
+    cmd = f'docker exec trustabac-mysql mysql -uroot -proot_secret_change_me trustabac_iot -N -e "{sql}"'
     res = subprocess.run(cmd, shell=True, capture_output=True, text=True)
     return res.stdout.strip()
 
@@ -114,9 +114,9 @@ def run_experiments():
 
         # Set specific preconditions for outlier scenarios if needed
         if sc_name == "LOW_TRUST":
-            subprocess.run('docker exec releasemind-mysql mysql -uroot -proot_secret_change_me trustabac_iot -e "UPDATE devices SET current_trust = 20.0 WHERE device_identifier = \'DOOR-SENSOR-001\';"', shell=True)
+            subprocess.run('docker exec trustabac-mysql mysql -uroot -proot_secret_change_me trustabac_iot -e "UPDATE devices SET current_trust = 20.0 WHERE device_identifier = \'DOOR-SENSOR-001\';"', shell=True)
         elif sc_name in ["NORMAL_ACCESS", "RESTRICT_ACCESS", "RECOVERY"]:
-            subprocess.run('docker exec releasemind-mysql mysql -uroot -proot_secret_change_me trustabac_iot -e "UPDATE devices SET current_trust = 80.0 WHERE device_identifier = \'DOOR-SENSOR-001\';"', shell=True)
+            subprocess.run('docker exec trustabac-mysql mysql -uroot -proot_secret_change_me trustabac_iot -e "UPDATE devices SET current_trust = 80.0 WHERE device_identifier = \'DOOR-SENSOR-001\';"', shell=True)
 
         req_payload = {
             "scenarioType": sc_name,

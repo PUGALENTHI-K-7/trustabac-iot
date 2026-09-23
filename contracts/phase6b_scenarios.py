@@ -1,4 +1,4 @@
-"""
+﻿"""
 Phase 6B Final Fixed Scenario Runner
 Corrects: trust event endpoint (plural /events), extreme risk inputs for DENY.
 """

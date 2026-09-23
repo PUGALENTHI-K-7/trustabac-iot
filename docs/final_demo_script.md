@@ -14,7 +14,7 @@
    ```bash
    docker ps
    ```
-   *Verify `releasemind-mysql` (port 3307), `trustabac-rabbitmq` (port 5672/15672), and `ganache-trustabac` (port 8545).*
+   *Verify `trustabac-mysql` (port 3307), `trustabac-rabbitmq` (port 5672/15672), and `trustabac-ganache` (port 8545).*
 2. **Launch Spring Boot Gateway**:
    ```bash
    start-app.bat
@@ -64,12 +64,12 @@
 
 ### Step 5: Fail-Closed Blockchain Outage & Recovery (2.5 min)
 1. **Simulate Blockchain Failure**:
-   - Pause or disconnect Ganache EVM container: `docker pause ganache-trustabac`.
+   - Pause or disconnect Ganache EVM container: `docker pause trustabac-ganache`.
 2. **Execute Operation During Outage**:
    - Submit door control request.
    - Show gateway intercepts exception in $0.100$ ms and strictly enforces **Fail-Closed `DENY` / `BLOCKED`**.
 3. **Restore Blockchain Node**:
-   - `docker unpause ganache-trustabac`.
+   - `docker unpause trustabac-ganache`.
 4. **Demonstrate Recovery**:
    - Submit follow-up request $\longrightarrow$ System resumes normal `ALLOW` / `EXECUTED` operations immediately.
 

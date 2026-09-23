@@ -5,11 +5,11 @@
 | Subsystem | Component | Implementation Specification | Configuration Parameters |
 | :--- | :--- | :--- | :--- |
 | **Host Platform** | Operating System | Windows 11 Enterprise (Build 10.0) | Multi-core x86_64, 16 Logical Processors |
-| **Application Runtime** | Java Virtual Machine | OpenJDK 21.0.8 LTS (Eclipse Adoptium) | Spring Boot 3.2.3, Spring Security 6.2 |
+| **Application Runtime** | Java Virtual Machine | OpenJDK 21.0.8 LTS (Eclipse Adoptium) | Spring Boot 4.1.1, Spring Security 6.2 |
 | **Relational Database** | MySQL Database Server | MySQL Community 8.0.45 (Docker) | InnoDB Engine, Port 3307, SSL Disabled |
 | **Message Broker** | RabbitMQ Messaging | RabbitMQ 3.13-management (Docker) | AMQP 0-9-1, Port 5672, Telemetry STOMP |
 | **Blockchain Testbed** | Ethereum Ganache EVM | Truffle Ganache v7.9.2 (Docker) | Chain ID 1337, Port 8545, Gas Limit 6,721,975 |
-| **Smart Contract** | `AdaptiveAccessControl` | Solidity ^0.8.19 (Web3j integration) | Deployed at `0xe78A0F7E598Cc8b0Bb87894B0F60dD2a88d6a8Ab` |
+| **Smart Contract** | `AdaptiveAccessControl` | Solidity ^0.8.20 (Web3j integration) | Deployed at `0xe78A0F7E598Cc8b0Bb87894B0F60dD2a88d6a8Ab` |
 | **Device Simulator** | `DeviceSimulatorService` | In-memory concurrent state emulator | 5 Devices (Thermostat, AC, TV, Light, Door Lock) |
 
 ## Table 2: Controlled Security Scenario Definitions and Evaluation Workloads

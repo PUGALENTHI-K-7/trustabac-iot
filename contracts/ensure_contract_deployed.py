@@ -1,4 +1,4 @@
-"""
+﻿"""
 TrustABAC-IoT — Contract Deployment Assurance Script
 Checks whether the contract address configured in .env has deployed bytecode on Ganache.
 If not deployed (e.g., fresh Ganache chain), deploys AdaptiveAccessControl from accounts[0],

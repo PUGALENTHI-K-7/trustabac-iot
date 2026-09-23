@@ -112,7 +112,7 @@ Tri-State: ALLOW → EXECUTED | RESTRICT → DOWNGRADED | DENY → BLOCKED
 ```
 
 **Technology Stack:**
-Java 21 · Spring Boot 3.2 · Solidity 0.8.19 · Ganache v7 · MySQL 8 · RabbitMQ 3.13
+Java 21 · Spring Boot 4.1.1 · Solidity 0.8.20 · Ganache v7 · MySQL 8 · RabbitMQ 3.13
 
 ---
 

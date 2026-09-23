@@ -1,4 +1,4 @@
-"""
+﻿"""
 Phase 6B Setup Script
 Deploys AdaptiveAccessControl to the running Ganache and prints all
 environment variables needed to start the Spring Boot application.

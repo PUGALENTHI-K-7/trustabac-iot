@@ -1,4 +1,4 @@
-# TrustABAC-IoT — Review 2 Demo Runbook
+﻿# TrustABAC-IoT — Review 2 Demo Runbook
 
 **Version:** Review 2 | **Date:** September 2026
 **Team:** Pugalenthi K (24MIC0082) · RK Bharath (24MIC0025)
@@ -27,9 +27,9 @@ docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
 **Expected output — all 3 containers UP:**
 ```
 NAMES                  STATUS          PORTS
-releasemind-mysql      Up X minutes    0.0.0.0:3307->3306/tcp
+trustabac-mysql      Up X minutes    0.0.0.0:3307->3306/tcp
 trustabac-rabbitmq     Up X minutes    0.0.0.0:5672->5672/tcp, 0.0.0.0:15672->15672/tcp
-ganache-trustabac      Up X minutes    0.0.0.0:8545->8545/tcp
+trustabac-ganache      Up X minutes    0.0.0.0:8545->8545/tcp
 ```
 
 **If any container is down:**
@@ -156,7 +156,7 @@ Invoke-RestMethod -Uri "http://localhost:8090/api/simulator/scenarios/UNAUTHORIZ
 
 ```powershell
 # Step 1: Pause Ganache
-docker pause ganache-trustabac
+docker pause trustabac-ganache
 
 # Step 2: Submit an operation (show it gets denied instantly)
 Invoke-RestMethod -Uri "http://localhost:8090/api/simulator/scenarios/NORMAL_STAY/run" -Method POST -ContentType "application/json" -Body "{}"
@@ -167,7 +167,7 @@ Invoke-RestMethod -Uri "http://localhost:8090/api/simulator/scenarios/NORMAL_STA
 
 ```powershell
 # Step 3: Restore Ganache
-docker unpause ganache-trustabac
+docker unpause trustabac-ganache
 
 # Step 4: Demonstrate recovery
 Invoke-RestMethod -Uri "http://localhost:8090/api/simulator/scenarios/NORMAL_STAY/run" -Method POST -ContentType "application/json" -Body "{}"
@@ -211,6 +211,6 @@ Invoke-RestMethod -Uri "http://localhost:8090/api/simulator/reset" -Method POST 
 |:---|:---|
 | Spring Boot not starting | Check `.env` file exists; run `docker ps` to verify MySQL/RabbitMQ up |
 | Dashboard shows "Disconnected" | Hard-refresh browser (Ctrl+Shift+R); check gateway is running |
-| Ganache container not found | Run `docker-compose up -d ganache-trustabac` |
+| Ganache container not found | Run `docker-compose up -d trustabac-ganache` |
 | Scenario 404 | Verify Spring Boot started fully; check logs for "Started in X seconds" |
 | Batch job stuck | Check `batch_run_audit` table in MySQL; restart Spring Boot |

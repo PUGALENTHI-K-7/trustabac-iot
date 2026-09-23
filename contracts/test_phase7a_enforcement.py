@@ -1,4 +1,4 @@
-"""
+﻿"""
 Phase 7A Live Resource Operation Enforcement Test Suite
 Verifies:
 1. Live REST API: POST /api/resource-operations/execute
@@ -28,7 +28,7 @@ def banner(title):
     print("=" * 70)
 
 def set_device_trust(device_id="DOOR-SENSOR-001", trust_val=80.0):
-    cmd = f'docker exec releasemind-mysql mysql -uroot -proot_secret_change_me trustabac_iot -e "UPDATE devices SET current_trust = {trust_val} WHERE device_identifier = \'{device_id}\';"'
+    cmd = f'docker exec trustabac-mysql mysql -uroot -proot_secret_change_me trustabac_iot -e "UPDATE devices SET current_trust = {trust_val} WHERE device_identifier = \'{device_id}\';"'
     subprocess.run(cmd, shell=True, capture_output=True)
 
 def http(method, path, body=None):

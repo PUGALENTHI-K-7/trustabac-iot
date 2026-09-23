@@ -1,4 +1,4 @@
-"""
+﻿"""
 Phase 6 â€” Real Ganache Blockchain Verification
 TrustABAC-IoT Smart Contract: AdaptiveAccessControl.sol
 

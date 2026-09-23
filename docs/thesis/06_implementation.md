@@ -3,8 +3,8 @@
 ## 6.1 Technology Stack and Module Structure
 The TrustABAC-IoT platform is implemented using modern enterprise software frameworks and blockchain toolchains:
 
-- **Programming Languages**: Java 21 LTS (OpenJDK 21.0.8), Solidity ^0.8.19, Python 3.13 (Testing & Evaluation Framework), JavaScript ES6.
-- **Backend Framework**: Spring Boot 3.2.3 (Spring Security 6.2, Spring Data JPA, Spring AMQP, Spring WebSocket STOMP, Spring Batch 5.1).
+- **Programming Languages**: Java 21 LTS (OpenJDK 21.0.8), Solidity ^0.8.20, Python 3.13 (Testing & Evaluation Framework), JavaScript ES6.
+- **Backend Framework**: Spring Boot 4.1.1 (Spring Security 6.2, Spring Data JPA, Spring AMQP, Spring WebSocket STOMP, Spring Batch 5.1).
 - **Blockchain Integration**: Web3j 4.10.3 (Java EVM Client), Truffle Ganache v7.9.2 (Ethereum EVM Testbed).
 - **Persistence & Messaging**: MySQL 8.0 Community (Docker), RabbitMQ 3.13 with Management Plugin (Docker).
 - **Build & CI Automation**: Apache Maven 3.9, PowerShell, Bash.
@@ -16,7 +16,7 @@ The smart contract defines the immutable decision matrix and state-transition ru
 
 ```solidity
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.20;
 
 contract AdaptiveAccessControl {
     address public owner;

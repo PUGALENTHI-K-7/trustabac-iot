@@ -30,9 +30,9 @@ if hasattr(sys.stdout, 'reconfigure'):
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUTPUT_MD = os.path.join(BASE_DIR, "contracts", "security_scan_final.md")
 
-IGNORED_DIRS = {".git", ".mvn", "target", "node_modules", "phase8b_charts", "charts"}
-IGNORED_EXTS = {".png", ".bin", ".class", ".jar", ".jpg", ".ico", ".svg", ".lock"}
-IGNORED_FILES = {"security_scan_final.py", "security_scan_final.md"}
+IGNORED_DIRS = {".git", ".mvn", "target", "node_modules", "phase8b_charts", "charts", "logs"}
+IGNORED_EXTS = {".png", ".bin", ".class", ".jar", ".jpg", ".ico", ".svg", ".lock", ".log"}
+IGNORED_FILES = {"security_scan_final.py", "security_scan_final.md", ".env"}
 
 PATTERNS = [
     ("64-Hex Private Key", re.compile(r"(?<![a-fA-F0-9])0x[a-fA-F0-9]{64}(?![a-fA-F0-9])")),

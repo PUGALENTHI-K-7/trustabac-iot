@@ -5,7 +5,7 @@ This checklist documents the complete technical and academic assets prepared for
 ---
 
 ## 1. Technical Implementation Assets
-- [x] **Source Code Repository**: Complete Java 21 Spring Boot 3.2.3 backend in `src/main/java/com/trustabac/iot/`.
+- [x] **Source Code Repository**: Complete Java 21 Spring Boot 4.1.1 backend in `src/main/java/com/trustabac/iot/`.
 - [x] **Solidity Smart Contract**: `AdaptiveAccessControl.sol` deployed on Ganache EVM (Chain ID 1337) at `0xe78A0F7E598Cc8b0Bb87894B0F60dD2a88d6a8Ab`.
 - [x] **Compiled Contract Artifacts**: ABI and BIN files preserved in `contracts/AdaptiveAccessControl.abi` and `.bin`.
 - [x] **Docker Infrastructure**: MySQL 8.0 (`port 3307`), RabbitMQ 3.13 (`port 5672/15672`), and Ganache EVM (`port 8545`) in `docker-compose.yml`.

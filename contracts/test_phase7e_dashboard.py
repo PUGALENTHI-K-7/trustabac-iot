@@ -1,4 +1,4 @@
-"""
+﻿"""
 Phase 7E Test Suite: Real-Time Monitoring Dashboard Verification
 Tests:
 1. Dashboard HTML, CSS, JS endpoints availability and proper rendering
@@ -52,7 +52,7 @@ def http_post(endpoint, data=None):
         return resp.getcode(), json.loads(content) if content else {}
 
 def set_device_trust(device_id="DOOR-SENSOR-001", trust_val=80.0):
-    cmd = f'docker exec releasemind-mysql mysql -uroot -proot_secret_change_me trustabac_iot -e "UPDATE devices SET current_trust = {trust_val} WHERE device_identifier = \'{device_id}\';"'
+    cmd = f'docker exec trustabac-mysql mysql -uroot -proot_secret_change_me trustabac_iot -e "UPDATE devices SET current_trust = {trust_val} WHERE device_identifier = \'{device_id}\';"'
     subprocess.run(cmd, shell=True, capture_output=True)
 
 def setup_prerequisites():

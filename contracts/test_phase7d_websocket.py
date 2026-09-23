@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
 Phase 7D Live Verification Script: WebSocket / STOMP Real-Time Telemetry Streaming
 
@@ -53,7 +53,7 @@ def http_post(endpoint, data=None):
         return json.loads(content) if content else {}
 
 def set_device_trust(device_id="DOOR-SENSOR-001", trust_val=80.0):
-    cmd = f'docker exec releasemind-mysql mysql -uroot -proot_secret_change_me trustabac_iot -e "UPDATE devices SET current_trust = {trust_val} WHERE device_identifier = \'{device_id}\';"'
+    cmd = f'docker exec trustabac-mysql mysql -uroot -proot_secret_change_me trustabac_iot -e "UPDATE devices SET current_trust = {trust_val} WHERE device_identifier = \'{device_id}\';"'
     subprocess.run(cmd, shell=True, capture_output=True)
 
 def setup_prerequisites():

@@ -1,4 +1,4 @@
-"""
+﻿"""
 Automated Validation Script for Phase 8C Research Artifacts
 Authoritatively validates all generated tables, summaries, CSV exports, and reports
 against the frozen, immutable Phase 8B raw empirical datasets.

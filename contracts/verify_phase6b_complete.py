@@ -1,4 +1,4 @@
-"""
+﻿"""
 Phase 6B Complete Real Ganache + Spring Boot + MySQL Verification Suite
 Executes:
 1. Ganache RPC & Web3 status verification
@@ -25,7 +25,7 @@ def banner(title):
     print("=" * 70)
 
 def set_device_trust(trust_val=80.0):
-    cmd = f'docker exec releasemind-mysql mysql -uroot -proot_secret_change_me trustabac_iot -e "UPDATE devices SET current_trust = {trust_val} WHERE device_identifier = \'DOOR-SENSOR-001\';"'
+    cmd = f'docker exec trustabac-mysql mysql -uroot -proot_secret_change_me trustabac_iot -e "UPDATE devices SET current_trust = {trust_val} WHERE device_identifier = \'DOOR-SENSOR-001\';"'
     subprocess.run(cmd, shell=True, capture_output=True)
 
 def http(method, path, body=None):
@@ -381,7 +381,7 @@ def main():
     }
 
     banner("5. MYSQL AUDIT TRAIL CORRELATION VERIFICATION")
-    mysql_cmd = ['docker', 'exec', 'releasemind-mysql', 'mysql', '-uroot', '-proot_secret_change_me', 'trustabac_iot', '-e', 'SELECT id, device_identifier, resource, operation, trust_score, risk_score, decision, contract_address, transaction_hash, block_number, evaluation_timestamp FROM blockchain_authorization_events ORDER BY id DESC LIMIT 10;']
+    mysql_cmd = ['docker', 'exec', 'trustabac-mysql', 'mysql', '-uroot', '-proot_secret_change_me', 'trustabac_iot', '-e', 'SELECT id, device_identifier, resource, operation, trust_score, risk_score, decision, contract_address, transaction_hash, block_number, evaluation_timestamp FROM blockchain_authorization_events ORDER BY id DESC LIMIT 10;']
     proc = subprocess.run(mysql_cmd, capture_output=True, text=True)
     print("  MySQL blockchain_authorization_events records:")
     print(proc.stdout)

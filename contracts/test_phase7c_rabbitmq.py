@@ -1,4 +1,4 @@
-"""
+﻿"""
 Phase 7C RabbitMQ / Spring AMQP Live Event Pipeline Verification Suite.
 Tests:
 1. RabbitMQ Live Connectivity and Topology Health Check (/api/messaging/status).
@@ -42,7 +42,7 @@ def make_request(path, method="GET", data=None):
         return 500, {"error": str(e)}
 
 def set_device_trust(device_id="DOOR-SENSOR-001", trust_val=80.0):
-    cmd = f'docker exec releasemind-mysql mysql -uroot -proot_secret_change_me trustabac_iot -e "UPDATE devices SET current_trust = {trust_val} WHERE device_identifier = \'{device_id}\';"'
+    cmd = f'docker exec trustabac-mysql mysql -uroot -proot_secret_change_me trustabac_iot -e "UPDATE devices SET current_trust = {trust_val} WHERE device_identifier = \'{device_id}\';"'
     subprocess.run(cmd, shell=True, capture_output=True)
 
 def setup_prerequisites():
