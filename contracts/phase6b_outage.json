@@ -1,0 +1,21 @@
+{
+  "pre_outage": {
+    "decision": "RESTRICT",
+    "tx": "0x145dbebf758d9fbf52766209b844fe551114db151fa595317b66365efe66eaac",
+    "block": "16"
+  },
+  "during_outage": {
+    "decision": "DENY",
+    "tx": null,
+    "reason": "Access Denied: Blockchain authorization engine unavailable (Fail-Closed Security Enforcement).",
+    "fail_closed": true,
+    "rpc_reachable": false
+  },
+  "post_recovery": {
+    "decision": "DENY",
+    "tx": null,
+    "block": "None",
+    "rpc_reachable": true,
+    "recovered": false
+  }
+}

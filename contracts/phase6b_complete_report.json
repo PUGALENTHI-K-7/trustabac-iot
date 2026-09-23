@@ -1,0 +1,132 @@
+{
+  "timestamp": "2026-09-22T08:18:06.124082+00:00",
+  "phase": "6B",
+  "scenarios": [
+    {
+      "scenario": "A",
+      "description": "High Trust (80) + Low Risk (22.0) -> ALLOW",
+      "expected_decision": "ALLOW",
+      "actual_decision": "ALLOW",
+      "expect_blockchain_tx": true,
+      "tx_hash": "0x9378cf8f3a5d2e5275c52bf7f953fd51f1c4db7170905e19fca929fd0e351d48",
+      "block_number": 246,
+      "trust_score": 80.0,
+      "risk_score": 22.0,
+      "abac_result": "PASS",
+      "reason": "Allowed by Smart Contract: High behavioral trust (80) and low contextual risk (22).",
+      "passed": true
+    },
+    {
+      "scenario": "B",
+      "description": "High Trust (80) + Medium Risk (35.3) -> RESTRICT",
+      "expected_decision": "RESTRICT",
+      "actual_decision": "RESTRICT",
+      "expect_blockchain_tx": true,
+      "tx_hash": "0xd5fc95e66e42c4a71bc5977d03daf32a88d389b8a2185967967f7f6f5337c3f3",
+      "block_number": 247,
+      "trust_score": 80.0,
+      "risk_score": 35.3,
+      "abac_result": "PASS",
+      "reason": "Restricted by Smart Contract: Adaptive authorization enforced for intermediate trust (80) or moderate risk (35).",
+      "passed": true
+    },
+    {
+      "scenario": "C",
+      "description": "High Trust (80) + Extreme High Risk (75.0 > 70) -> DENY",
+      "expected_decision": "DENY",
+      "actual_decision": "DENY",
+      "expect_blockchain_tx": true,
+      "tx_hash": "0x7776b632d232ed8e6d52cf94a9e1dca0b69b5be689d46a41712f3e6fbf7407d0",
+      "block_number": 248,
+      "trust_score": 80.0,
+      "risk_score": 75.0,
+      "abac_result": "PASS",
+      "reason": "Denied by Smart Contract: Insufficient trust (80) or excessive contextual risk (75).",
+      "passed": true
+    },
+    {
+      "scenario": "D",
+      "description": "Low Trust (15.0 < 30) + Low Risk -> DENY",
+      "expected_decision": "DENY",
+      "actual_decision": "DENY",
+      "expect_blockchain_tx": true,
+      "tx_hash": "0x7a24bb96571198167d06842acef6d597977f8e8614190a91a59dea54199045e9",
+      "block_number": 249,
+      "trust_score": 15.0,
+      "risk_score": 22.0,
+      "abac_result": "PASS",
+      "reason": "Denied by Smart Contract: Insufficient trust (15) or excessive contextual risk (22).",
+      "passed": true
+    },
+    {
+      "scenario": "E",
+      "description": "Unregistered Device -> DENY (Fast fail at ABAC Gate)",
+      "expected_decision": "DENY",
+      "actual_decision": "DENY",
+      "expect_blockchain_tx": false,
+      "tx_hash": null,
+      "block_number": null,
+      "trust_score": null,
+      "risk_score": null,
+      "abac_result": "FAIL",
+      "reason": "Access Denied: ABAC eligibility failed - Device 'UNKNOWN-DEV-999' is not registered in the gateway inventory",
+      "passed": true
+    },
+    {
+      "scenario": "F",
+      "description": "Missing Booking -> DENY (Fast fail at ABAC Gate)",
+      "expected_decision": "DENY",
+      "actual_decision": "DENY",
+      "expect_blockchain_tx": false,
+      "tx_hash": null,
+      "block_number": null,
+      "trust_score": null,
+      "risk_score": null,
+      "abac_result": "FAIL",
+      "reason": "Access Denied: ABAC eligibility failed - Policy 'Phase6B-Guest-DoorLock-CONTROL': Condition failed on 'booking.valid': expected 'true' EQUALS, actual was 'false'",
+      "passed": true
+    }
+  ],
+  "outage_test": {
+    "pre_outage_decision": "ALLOW",
+    "pre_outage_tx": "0x83502629898037b27440a204213f917bf8493b94f9b4b46ad656ee632b5a3b35",
+    "during_outage_status": 200,
+    "during_outage_response": {
+      "requestId": 1485,
+      "deviceIdentifier": "DOOR-SENSOR-001",
+      "userId": "guest-user-001",
+      "resource": "door-sensor",
+      "operation": "CONTROL",
+      "abacResult": "PASS",
+      "abacReason": "All required ABAC conditions satisfied for policy 'Phase6B-Guest-DoorLock-CONTROL'.",
+      "evaluatedPolicyName": "Phase6B-Guest-DoorLock-CONTROL",
+      "trustScore": 80.0,
+      "trustStatus": "TRUSTED",
+      "riskScore": 22.0,
+      "riskStatus": "LOW",
+      "riskFactors": {
+        "timeRisk": 0.0,
+        "locationRisk": 0.0,
+        "sensitivityRisk": 0.35,
+        "frequencyRisk": 0.0,
+        "networkRisk": 1.0,
+        "violationRisk": 0.0,
+        "behaviorRisk": 0.0
+      },
+      "riskReason": "Contextual risk elevated due to: untrusted/remote network (INTERNAL).",
+      "finalDecision": "DENY",
+      "decisionReason": "Access Denied: Blockchain authorization engine unavailable (Fail-Closed Security Enforcement).",
+      "blockchainTransactionHash": null,
+      "blockchainBlockNumber": null,
+      "contractAddress": null,
+      "evaluationTimestamp": "2026-09-22T13:48:20.3862493"
+    },
+    "fail_closed_verified": true,
+    "post_recovery_decision": "DENY",
+    "post_recovery_tx": null,
+    "recovery_passed": false
+  },
+  "mysql_verification": {
+    "raw_output": "id\tdevice_identifier\tresource\toperation\ttrust_score\trisk_score\tdecision\tcontract_address\ttransaction_hash\tblock_number\tevaluation_timestamp\n1108\tDOOR-SENSOR-001\tdoor-sensor\tCONTROL\t80\t22\tALLOW\t0xCfEB869F69431e42cdB54A4F4f105C19C080A601\t0x83502629898037b27440a204213f917bf8493b94f9b4b46ad656ee632b5a3b35\t250\t2026-09-22 08:18:16.784793\n1107\tDOOR-SENSOR-001\tdoor-sensor\tCONTROL\t15\t22\tDENY\t0xCfEB869F69431e42cdB54A4F4f105C19C080A601\t0x7a24bb96571198167d06842acef6d597977f8e8614190a91a59dea54199045e9\t249\t2026-09-22 08:18:11.773834\n1106\tDOOR-SENSOR-001\tGATEWAY_ADMIN\tCONTROL\t80\t75\tDENY\t0xCfEB869F69431e42cdB54A4F4f105C19C080A601\t0x7776b632d232ed8e6d52cf94a9e1dca0b69b5be689d46a41712f3e6fbf7407d0\t248\t2026-09-22 08:18:09.991531\n1105\tDOOR-SENSOR-001\tdoor-sensor\tCONTROL\t80\t35.3\tRESTRICT\t0xCfEB869F69431e42cdB54A4F4f105C19C080A601\t0xd5fc95e66e42c4a71bc5977d03daf32a88d389b8a2185967967f7f6f5337c3f3\t247\t2026-09-22 08:18:08.382012\n1104\tDOOR-SENSOR-001\tdoor-sensor\tCONTROL\t80\t22\tALLOW\t0xCfEB869F69431e42cdB54A4F4f105C19C080A601\t0x9378cf8f3a5d2e5275c52bf7f953fd51f1c4db7170905e19fca929fd0e351d48\t246\t2026-09-22 08:18:06.759299\n1103\tDOOR-SENSOR-001\tSMART_DOOR_LOCK\tREAD\t80\t14\tALLOW\t0xCfEB869F69431e42cdB54A4F4f105C19C080A601\t0x03ac3b482aeeca1c0b7f1f7b7c09449da9ba5de7adf559dfffe773654250021c\t239\t2026-09-22 08:16:23.881457\n1102\tDOOR-SENSOR-001\tSMART_DOOR_LOCK\tREAD\t80\t14\tALLOW\t0xCfEB869F69431e42cdB54A4F4f105C19C080A601\t0x08048ddb673aad21e526d84ab54dd24643ec60cbe035aa129ec6822886c53a78\t238\t2026-09-22 08:16:23.809708\n1101\tDOOR-SENSOR-001\tSMART_DOOR_LOCK\tREAD\t80\t14\tALLOW\t0xCfEB869F69431e42cdB54A4F4f105C19C080A601\t0xa721ee77678af9b1a02099815312d823da843ecb8075ccc8a58fb54db03bbc8a\t237\t2026-09-22 08:16:23.740275\n1100\tDOOR-SENSOR-001\tSMART_DOOR_LOCK\tREAD\t80\t14\tALLOW\t0xCfEB869F69431e42cdB54A4F4f105C19C080A601\t0x57919b655f04887e1076f62383b8fc6f54a1bdae15e73045a84b734fd330dd36\t236\t2026-09-22 08:16:23.673367\n1099\tDOOR-SENSOR-001\tSMART_DOOR_LOCK\tREAD\t80\t14\tALLOW\t0xCfEB869F69431e42cdB54A4F4f105C19C080A601\t0xd69254dfc5f93d4aa155af6a9118308a19743a539c9871f31376c3ef3a5b96ca\t235\t2026-09-22 08:16:23.603601\n"
+  }
+}

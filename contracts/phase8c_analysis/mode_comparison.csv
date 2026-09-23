@@ -1,0 +1,10 @@
+scenario,sample_count,mode_a_agreements,mode_a_disagreements,mode_a_agreement_pct,mode_b_agreements,mode_b_disagreements,mode_b_agreement_pct,divergence_category
+NORMAL_ACCESS,90,90,0,100.00%,90,0,100.00%,Full policy concordance under valid attributes and high trust.
+RESTRICT_ACCESS,90,0,90,0.00%,90,0,100.00%,Mode A lacks dynamic contextual risk & operation downgrading.
+LOW_TRUST,90,0,90,0.00%,90,0,100.00%,Mode A ignores degraded historical reputation (<30).
+HIGH_RISK,90,0,90,0.00%,90,0,100.00%,Mode A ignores contextual environment risk elevation (>70).
+ABAC_FAILURE,90,90,0,100.00%,90,0,100.00%,Concordance on invalid booking / expired attribute Gate 1 rejection.
+MIXED_SECURITY_WORKLOAD,90,41,49,45.56%,90,0,100.00%,Mode A diverges on degraded trust and high-risk stochastic requests.
+BLOCKCHAIN_OUTAGE,90,0,90,0.00%,90,0,100.00%,Mode A analytical model does not incorporate blockchain availability.
+RECOVERY,90,90,0,100.00%,90,0,100.00%,Full concordance restored following node reconnection.
+POOLED_TOTAL,720,311,409,43.19%,720,0,100.00%,Overall counterfactual policy divergence across 720 requests.

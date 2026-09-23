@@ -1,0 +1,9 @@
+scenario,expected_decision,expected_enforcement,observed_decision,observed_enforcement,match_rate,security_semantics
+NORMAL_ACCESS,ALLOW,EXECUTED,100% ALLOW (90/90),100% EXECUTED,100.0%,Legitimate active guest access granted without restriction.
+RESTRICT_ACCESS,RESTRICT,DOWNGRADED,100% RESTRICT (90/90),100% DOWNGRADED,100.0%,Adaptive privilege attenuation enforced under moderate risk.
+LOW_TRUST,DENY,BLOCKED,100% DENY (90/90),100% BLOCKED,100.0%,Degraded behavioral reputation triggered smart contract block.
+HIGH_RISK,DENY,BLOCKED,100% DENY (90/90),100% BLOCKED,100.0%,Contextual anomaly gate isolated request prior to EVM execution.
+ABAC_FAILURE,DENY,BLOCKED,100% DENY (90/90),100% BLOCKED,100.0%,Gate 1 attribute failure prevented downstream resource access.
+BLOCKCHAIN_OUTAGE,DENY,BLOCKED,100% DENY (90/90),100% BLOCKED,100.0%,Fail-closed safety invariant successfully blocked requests during outage.
+RECOVERY,ALLOW,EXECUTED,100% ALLOW (90/90),100% EXECUTED,100.0%,Normal blockchain-backed authorization restored upon reconnection.
+MIXED_SECURITY_WORKLOAD,DYNAMIC,DYNAMIC,41 ALLOW / 20 RESTRICT / 29 DENY,41 EXECUTED / 20 DOWNGRADED / 29 BLOCKED,100.0%,Deterministic multi-threat policy handling under stochastic load.

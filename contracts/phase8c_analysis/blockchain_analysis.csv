@@ -1,0 +1,10 @@
+scenario,measured_requests,on_chain_tx_count,gas_per_tx,total_gas_used,tx_rate_pct,execution_path
+NORMAL_ACCESS,90,90,31863,2867670,100.0%,On-Chain AdaptiveAccessControl.evaluateAccess
+RESTRICT_ACCESS,90,90,31863,2867670,100.0%,On-Chain AdaptiveAccessControl.evaluateAccess
+LOW_TRUST,90,90,31863,2867670,100.0%,On-Chain AdaptiveAccessControl.evaluateAccess
+HIGH_RISK,90,0,0,0,0.0%,Pre-Blockchain Risk Gate Short-Circuit
+ABAC_FAILURE,90,0,0,0,0.0%,Gate 1 ABAC Attribute Short-Circuit
+BLOCKCHAIN_OUTAGE,90,0,0,0,0.0%,Fail-Closed Gateway Outage Handler
+RECOVERY,90,90,31863,2867670,100.0%,On-Chain AdaptiveAccessControl.evaluateAccess
+MIXED_SECURITY_WORKLOAD,90,61,31863,1943643,67.78%,Hybrid On-Chain (61) / Pre-EVM Short-Circuit (29)
+POOLED_TOTAL,720,421,31863,13414323,58.47%,"421 On-Chain Evaluations (31,863 gas each) / 299 Pre-EVM Rejections"

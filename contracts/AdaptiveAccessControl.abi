@@ -1,0 +1,334 @@
+[
+  {
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "requestReference",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "deviceIdentifierHash",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "enum AdaptiveAccessControl.Decision",
+        "name": "decision",
+        "type": "uint8"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "trustScore",
+        "type": "uint8"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "riskScore",
+        "type": "uint8"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "resourceSensitivity",
+        "type": "uint8"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "operation",
+        "type": "uint8"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "timestamp",
+        "type": "uint256"
+      }
+    ],
+    "name": "AuthorizationEvaluated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "trustHigh",
+        "type": "uint8"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "trustMedium",
+        "type": "uint8"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "riskLow",
+        "type": "uint8"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "riskMedium",
+        "type": "uint8"
+      }
+    ],
+    "name": "ThresholdsUpdated",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bool",
+        "name": "abacPass",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "bookingActive",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint8",
+        "name": "resourceSensitivity",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "operation",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "trustScore",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "riskScore",
+        "type": "uint8"
+      }
+    ],
+    "name": "calculateDecision",
+    "outputs": [
+      {
+        "internalType": "enum AdaptiveAccessControl.Decision",
+        "name": "decision",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "reasonCode",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "requestReference",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "deviceIdentifierHash",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bool",
+        "name": "abacPass",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "bookingActive",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint8",
+        "name": "resourceSensitivity",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "operation",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "trustScore",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "riskScore",
+        "type": "uint8"
+      }
+    ],
+    "name": "evaluateAccess",
+    "outputs": [
+      {
+        "internalType": "enum AdaptiveAccessControl.Decision",
+        "name": "decision",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "reasonCode",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "riskLow",
+    "outputs": [
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "riskMedium",
+    "outputs": [
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint8",
+        "name": "_riskLow",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "_riskMedium",
+        "type": "uint8"
+      }
+    ],
+    "name": "setRiskThresholds",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint8",
+        "name": "_trustHigh",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "_trustMedium",
+        "type": "uint8"
+      }
+    ],
+    "name": "setTrustThresholds",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "trustHigh",
+    "outputs": [
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "trustMedium",
+    "outputs": [
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

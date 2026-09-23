@@ -1,0 +1,91 @@
+version: '3.8'
+
+services:
+  # 1. Dedicated MySQL 8.0 Database
+  trustabac-mysql:
+    image: mysql:8.0
+    container_name: trustabac-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?Set DB_ROOT_PASSWORD in .env}
+      MYSQL_DATABASE: ${DB_NAME:-trustabac_iot}
+      MYSQL_USER: ${DB_USERNAME:-trustabac}
+      MYSQL_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+    ports:
+      - "${DB_PORT:-3308}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - trustabac-net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 2. Local Ganache Ethereum Blockchain
+  trustabac-ganache:
+    image: trufflesuite/ganache:latest
+    container_name: trustabac-ganache
+    restart: unless-stopped
+    command: >
+      --wallet.deterministic
+      --chain.chainId ${BLOCKCHAIN_CHAIN_ID:-1337}
+      --chain.networkId ${BLOCKCHAIN_CHAIN_ID:-1337}
+      --server.host 0.0.0.0
+      --server.port 8545
+    ports:
+      - "${BLOCKCHAIN_PORT:-8545}:8545"
+    networks:
+      - trustabac-net
+
+  # 3. RabbitMQ Message Broker (Phase 7C Preparation)
+  trustabac-rabbitmq:
+    image: rabbitmq:3-management
+    container_name: trustabac-rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-guest}
+    ports:
+      - "${RABBITMQ_PORT:-5672}:5672"
+      - "${RABBITMQ_MGMT_PORT:-15672}:15672"
+    networks:
+      - trustabac-net
+
+  # 4. TrustABAC-IoT Spring Boot Core Application
+  trustabac-iot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: trustabac-iot
+    restart: unless-stopped
+    depends_on:
+      trustabac-mysql:
+        condition: service_healthy
+      trustabac-ganache:
+        condition: service_started
+      trustabac-rabbitmq:
+        condition: service_started
+    environment:
+      SERVER_PORT: ${SERVER_PORT:-8090}
+      DB_HOST: trustabac-mysql
+      DB_PORT: 3306
+      DB_NAME: ${DB_NAME:-trustabac_iot}
+      DB_USERNAME: ${DB_USERNAME:-trustabac}
+      DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+      BLOCKCHAIN_RPC_URL: http://trustabac-ganache:8545
+      BLOCKCHAIN_CHAIN_ID: ${BLOCKCHAIN_CHAIN_ID:-1337}
+      BLOCKCHAIN_CONTRACT_ADDRESS: ${BLOCKCHAIN_CONTRACT_ADDRESS:-}
+      BLOCKCHAIN_PRIVATE_KEY: ${BLOCKCHAIN_PRIVATE_KEY:-}
+    ports:
+      - "${SERVER_PORT:-8090}:8090"
+    networks:
+      - trustabac-net
+
+volumes:
+  mysql_data:
+
+networks:
+  trustabac-net:
+    driver: bridge

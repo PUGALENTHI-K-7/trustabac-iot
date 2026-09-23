@@ -1,0 +1,101 @@
+[
+  {
+    "id": "TEST 1",
+    "name": "ALLOW + CONTROL on Smart Door Lock -> EXECUTED (Door unlocks)",
+    "expected_status": "EXECUTED",
+    "actual_status": "EXECUTED",
+    "expected_decision": "ALLOW",
+    "actual_decision": "ALLOW",
+    "passed": true,
+    "tx_hash": "0xd83bd3f3c84c7955ad23345f5e283aec17da291fa8c482c6fa674f02e32a8ad7",
+    "block": 1963
+  },
+  {
+    "id": "TEST 2",
+    "name": "RESTRICT + CONTROL on Smart Door Lock -> DOWNGRADED (Door remains LOCKED)",
+    "expected_status": "DOWNGRADED",
+    "actual_status": "DOWNGRADED",
+    "expected_decision": "RESTRICT",
+    "actual_decision": "RESTRICT",
+    "passed": true,
+    "tx_hash": "0x6020709aab645572df700956fef7384f94e64f357772a273880c77fffbc1c825",
+    "block": 1964
+  },
+  {
+    "id": "TEST 3",
+    "name": "RESTRICT + READ on Smart Door Lock -> EXECUTED (Status read permitted)",
+    "expected_status": "EXECUTED",
+    "actual_status": "EXECUTED",
+    "expected_decision": "RESTRICT",
+    "actual_decision": "RESTRICT",
+    "passed": true,
+    "tx_hash": "0x1ab27208b11c8848f28c492e2146d91f99e1bc7424df1ec5c5ae37cd272e02cb",
+    "block": 1965
+  },
+  {
+    "id": "TEST 4",
+    "name": "DENY + CONTROL on Smart Door Lock (Low Trust 15.0) -> BLOCKED",
+    "expected_status": "BLOCKED",
+    "actual_status": "BLOCKED",
+    "expected_decision": "DENY",
+    "actual_decision": "DENY",
+    "passed": true,
+    "tx_hash": "0xa2aa284d8c096584724d39afbf1ebca14e1781a9e62001f49baaf0cc2b1b9aa5",
+    "block": 1966
+  },
+  {
+    "id": "TEST 5",
+    "name": "DENY + READ on Smart Door Lock (Low Trust 15.0) -> BLOCKED",
+    "expected_status": "BLOCKED",
+    "actual_status": "BLOCKED",
+    "expected_decision": "DENY",
+    "actual_decision": "DENY",
+    "passed": true,
+    "tx_hash": "0x2ad4e991ef1e13697cbdfaa4cec9f95dc257ee6cb7d6f3f8cb72ee0442637874",
+    "block": 1967
+  },
+  {
+    "id": "TEST 6",
+    "name": "ABAC Gate FAIL (Unregistered Device) -> BLOCKED",
+    "expected_status": "BLOCKED",
+    "actual_status": "BLOCKED",
+    "expected_decision": "DENY",
+    "actual_decision": "DENY",
+    "passed": true,
+    "tx_hash": null,
+    "block": null
+  },
+  {
+    "id": "TEST 7",
+    "name": "ABAC Gate FAIL (Missing Booking) -> BLOCKED",
+    "expected_status": "BLOCKED",
+    "actual_status": "BLOCKED",
+    "expected_decision": "DENY",
+    "actual_decision": "DENY",
+    "passed": true,
+    "tx_hash": null,
+    "block": null
+  },
+  {
+    "id": "TEST 8",
+    "name": "RESTRICT + CONTROL on Smart Thermostat -> DOWNGRADED (Eco-clamp temp to 24.0C)",
+    "expected_status": "DOWNGRADED",
+    "actual_status": "DOWNGRADED",
+    "expected_decision": "RESTRICT",
+    "actual_decision": "RESTRICT",
+    "passed": true,
+    "tx_hash": "0x18356dd589cabd26cdbc5a08ca9aaa36b57d3ad94ab86d3ee8c601a41e3115aa",
+    "block": 1968
+  },
+  {
+    "id": "TEST 9",
+    "name": "ALLOW + CONTROL on Smart Light -> EXECUTED (Power turned ON)",
+    "expected_status": "EXECUTED",
+    "actual_status": "EXECUTED",
+    "expected_decision": "ALLOW",
+    "actual_decision": "ALLOW",
+    "passed": true,
+    "tx_hash": "0xa74d763c36cded62c763fb9699c8dff75699952e0c02a7e83fa909ab751cc855",
+    "block": 1969
+  }
+]

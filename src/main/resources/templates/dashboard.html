@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${appName} + ' — Real-Time Monitoring Dashboard'">TrustABAC-IoT Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}" href="/css/dashboard.css">
+</head>
+<body>
+
+    <!-- Header & Context Bar -->
+    <header class="dashboard-header">
+        <div class="header-main">
+            <div class="title-group">
+                <h1 th:text="${appName}">TrustABAC-IoT</h1>
+                <p class="subtitle" th:text="${appSubtitle}">Adaptive Trust- and Risk-Aware Smart-Contract Access Control for Resource-Constrained IoT Networks</p>
+            </div>
+            <div class="context-badges">
+                <span class="badge context-badge">Property: <strong id="contextPropertyId" th:text="${propertyId}">Property-001</strong></span>
+                <span class="badge context-badge">Guest: <strong id="contextGuestUserId" th:text="${guestUserId}">Guest-001</strong></span>
+                <span class="badge context-badge">Booking: <strong id="contextBookingId" th:text="${bookingId}">BOOK-001</strong></span>
+            </div>
+        </div>
+
+        <!-- Infrastructure Health Indicators -->
+        <div class="health-indicators" id="healthIndicators">
+            <div class="indicator-item" id="indicatorBackend">
+                <span class="dot dot-unknown"></span>
+                <span class="indicator-label">Backend:</span>
+                <span class="indicator-val">CHECKING</span>
+            </div>
+            <div class="indicator-item" id="indicatorMySQL">
+                <span class="dot dot-unknown"></span>
+                <span class="indicator-label">MySQL:</span>
+                <span class="indicator-val">CHECKING</span>
+            </div>
+            <div class="indicator-item" id="indicatorGanache">
+                <span class="dot dot-unknown"></span>
+                <span class="indicator-label">Ganache:</span>
+                <span class="indicator-val">CHECKING</span>
+            </div>
+            <div class="indicator-item" id="indicatorRabbitMQ">
+                <span class="dot dot-unknown"></span>
+                <span class="indicator-label">RabbitMQ:</span>
+                <span class="indicator-val">CHECKING</span>
+            </div>
+            <div class="indicator-item" id="indicatorWebSocket">
+                <span class="dot dot-unknown"></span>
+                <span class="indicator-label">WebSocket:</span>
+                <span class="indicator-val" id="wsStatusText">CONNECTING</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Architecture Flow Diagram Banner -->
+    <section class="arch-flow-section">
+        <div class="arch-flow-container">
+            <div class="arch-step" id="stepAbac">
+                <div class="step-num">Gate 1</div>
+                <div class="step-title">ABAC Policy</div>
+                <div class="step-sub">Subject & Booking</div>
+            </div>
+            <div class="arch-arrow">➔</div>
+            <div class="arch-step" id="stepTrust">
+                <div class="step-num">Gate 2</div>
+                <div class="step-title">Dynamic Trust</div>
+                <div class="step-sub">Score Evaluation</div>
+            </div>
+            <div class="arch-arrow">➔</div>
+            <div class="arch-step" id="stepRisk">
+                <div class="step-num">Gate 3</div>
+                <div class="step-title">Contextual Risk</div>
+                <div class="step-sub">Threat & Frequency</div>
+            </div>
+            <div class="arch-arrow">➔</div>
+            <div class="arch-step" id="stepBlockchain">
+                <div class="step-num">Gate 4</div>
+                <div class="step-title">Smart Contract</div>
+                <div class="step-sub">On-Chain Decision</div>
+            </div>
+            <div class="arch-arrow">➔</div>
+            <div class="arch-step" id="stepEnforce">
+                <div class="step-num">Gate 5</div>
+                <div class="step-title">Enforcement</div>
+                <div class="step-sub">EXECUTED / DOWNGRADED</div>
+            </div>
+            <div class="arch-arrow">➔</div>
+            <div class="arch-step" id="stepAmqp">
+                <div class="step-num">Pipeline</div>
+                <div class="step-title">RabbitMQ</div>
+                <div class="step-sub">Asynchronous Bus</div>
+            </div>
+            <div class="arch-arrow">➔</div>
+            <div class="arch-step" id="stepTelemetry">
+                <div class="step-num">Live Stream</div>
+                <div class="step-title">STOMP Telemetry</div>
+                <div class="step-sub">Dashboard Stream</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Dashboard Grid -->
+    <main class="dashboard-main-grid">
+
+        <!-- Simulator Control & Scenarios -->
+        <section class="panel simulator-panel" id="simulatorPanel">
+            <div class="panel-header">
+                <h2>IoT Traffic & Scenario Simulator</h2>
+                <div class="sim-actions">
+                    <button class="btn btn-sm btn-primary" id="btnSimStart" onclick="startSimulator()">Start</button>
+                    <button class="btn btn-sm btn-warning" id="btnSimStop" onclick="stopSimulator()">Stop</button>
+                    <button class="btn btn-sm btn-secondary" id="btnSimReset" onclick="resetSimulator()">Reset</button>
+                    <span class="sim-status-pill" id="simStatusPill">STATUS: IDLE</span>
+                </div>
+            </div>
+            <div class="sim-stats-bar">
+                <div class="stat-box">Scenarios: <strong id="statScenarios">0</strong></div>
+                <div class="stat-box">Requests: <strong id="statRequests">0</strong></div>
+                <div class="stat-box stat-allow">ALLOW: <strong id="statAllows">0</strong></div>
+                <div class="stat-box stat-restrict">RESTRICT: <strong id="statRestricts">0</strong></div>
+                <div class="stat-box stat-deny">DENY: <strong id="statDenies">0</strong></div>
+            </div>
+            <div class="scenario-buttons-grid">
+                <button class="scenario-btn scenario-normal" onclick="runScenario('NORMAL_STAY')">
+                    <strong>1. NORMAL_STAY</strong>
+                    <span>Valid Stay (10 ALLOW / EXECUTED)</span>
+                </button>
+                <button class="scenario-btn scenario-deny" onclick="runScenario('PRE_CHECKIN')">
+                    <strong>2. PRE_CHECKIN</strong>
+                    <span>Early Arrival (3 DENY / BLOCKED)</span>
+                </button>
+                <button class="scenario-btn scenario-warning" onclick="runScenario('SUSPICIOUS_ACTIVITY')">
+                    <strong>3. SUSPICIOUS_ACTIVITY</strong>
+                    <span>Context Flags + Trust Penalty</span>
+                </button>
+                <button class="scenario-btn scenario-warning" onclick="runScenario('REQUEST_FLOODING')">
+                    <strong>4. REQUEST_FLOODING</strong>
+                    <span>Burst Rate Flooding (-25 Trust)</span>
+                </button>
+                <button class="scenario-btn scenario-danger" onclick="runScenario('HIGH_RISK_ATTACK')">
+                    <strong>5. HIGH_RISK_ATTACK</strong>
+                    <span>Router Admin Attack (DENY)</span>
+                </button>
+                <button class="scenario-btn scenario-danger" onclick="runScenario('LOW_TRUST_ATTACK')">
+                    <strong>6. LOW_TRUST_ATTACK</strong>
+                    <span>Malicious Degradation (DENY)</span>
+                </button>
+                <button class="scenario-btn scenario-danger" onclick="runScenario('UNAUTHORIZED_SENSITIVE_ACCESS')">
+                    <strong>7. UNAUTHORIZED_SENSITIVE</strong>
+                    <span>Camera / Router Access (ABAC FAIL)</span>
+                </button>
+                <button class="scenario-btn scenario-restrict" onclick="runScenario('RESTRICT_ENFORCEMENT')">
+                    <strong>8. RESTRICT_ENFORCE</strong>
+                    <span>Lock DOWNGRADED / Clamped AC</span>
+                </button>
+                <button class="scenario-btn scenario-deny" onclick="runScenario('POST_CHECKOUT')">
+                    <strong>9. POST_CHECKOUT</strong>
+                    <span>Expired Booking (DENY / BLOCKED)</span>
+                </button>
+                <button class="scenario-btn scenario-success" onclick="runScenario('RECOVERY')">
+                    <strong>10. RECOVERY</strong>
+                    <span>Admin Recovery (+10 Restored)</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Smart-Rental 9-Device Fleet Overview -->
+        <section class="panel fleet-panel" id="fleetPanel">
+            <div class="panel-header">
+                <h2>Smart-Rental Device Fleet (9 Canonical Devices)</h2>
+                <span class="panel-subtitle">Live Physical State & Policy Enforcement Store</span>
+            </div>
+            <div class="devices-grid" id="devicesGrid">
+                <!-- Device cards rendered dynamically & statically initialized -->
+                <div class="device-card" id="card-DOOR-SENSOR-001">
+                    <div class="device-header">
+                        <span class="device-name">Smart Door Lock</span>
+                        <span class="sensitivity-tag sens-high">HIGH</span>
+                    </div>
+                    <div class="device-id">DOOR-SENSOR-001</div>
+                    <div class="device-state-display state-locked" id="state-DOOR-SENSOR-001">LOCKED</div>
+                    <div class="device-metrics">
+                        <div>Trust: <span class="metric-val" id="trust-DOOR-SENSOR-001">80.0</span></div>
+                        <div>Risk: <span class="metric-val" id="risk-DOOR-SENSOR-001">14.0</span></div>
+                    </div>
+                    <div class="device-footer">
+                        <span class="decision-badge badge-allow" id="dec-DOOR-SENSOR-001">ALLOW</span>
+                        <span class="enforce-badge status-executed" id="enf-DOOR-SENSOR-001">EXECUTED</span>
+                    </div>
+                </div>
+
+                <div class="device-card" id="card-WIFI-001">
+                    <div class="device-header">
+                        <span class="device-name">Guest WiFi Router</span>
+                        <span class="sensitivity-tag sens-low">LOW</span>
+                    </div>
+                    <div class="device-id">WIFI-001</div>
+                    <div class="device-state-display state-active" id="state-WIFI-001">ONLINE (STANDARD)</div>
+                    <div class="device-metrics">
+                        <div>Trust: <span class="metric-val" id="trust-WIFI-001">80.0</span></div>
+                        <div>Risk: <span class="metric-val" id="risk-WIFI-001">12.3</span></div>
+                    </div>
+                    <div class="device-footer">
+                        <span class="decision-badge badge-allow" id="dec-WIFI-001">ALLOW</span>
+                        <span class="enforce-badge status-executed" id="enf-WIFI-001">EXECUTED</span>
+                    </div>
+                </div>
+
+                <div class="device-card" id="card-TV-001">
+                    <div class="device-header">
+                        <span class="device-name">Living Room TV</span>
+                        <span class="sensitivity-tag sens-low">LOW</span>
+                    </div>
+                    <div class="device-id">TV-001</div>
+                    <div class="device-state-display state-off" id="state-TV-001">POWER: OFF</div>
+                    <div class="device-metrics">
+                        <div>Trust: <span class="metric-val" id="trust-TV-001">80.0</span></div>
+                        <div>Risk: <span class="metric-val" id="risk-TV-001">10.0</span></div>
+                    </div>
+                    <div class="device-footer">
+                        <span class="decision-badge badge-allow" id="dec-TV-001">ALLOW</span>
+                        <span class="enforce-badge status-executed" id="enf-TV-001">EXECUTED</span>
+                    </div>
+                </div>
+
+                <div class="device-card" id="card-AC-001">
+                    <div class="device-header">
+                        <span class="device-name">Master Bedroom AC</span>
+                        <span class="sensitivity-tag sens-medium">MEDIUM</span>
+                    </div>
+                    <div class="device-id">AC-001</div>
+                    <div class="device-state-display state-off" id="state-AC-001">POWER: OFF</div>
+                    <div class="device-metrics">
+                        <div>Trust: <span class="metric-val" id="trust-AC-001">80.0</span></div>
+                        <div>Risk: <span class="metric-val" id="risk-AC-001">12.0</span></div>
+                    </div>
+                    <div class="device-footer">
+                        <span class="decision-badge badge-allow" id="dec-AC-001">ALLOW</span>
+                        <span class="enforce-badge status-executed" id="enf-AC-001">EXECUTED</span>
+                    </div>
+                </div>
+
+                <div class="device-card" id="card-LIGHT-001">
+                    <div class="device-header">
+                        <span class="device-name">Smart Light</span>
+                        <span class="sensitivity-tag sens-low">LOW</span>
+                    </div>
+                    <div class="device-id">LIGHT-001</div>
+                    <div class="device-state-display state-off" id="state-LIGHT-001">POWER: OFF</div>
+                    <div class="device-metrics">
+                        <div>Trust: <span class="metric-val" id="trust-LIGHT-001">80.0</span></div>
+                        <div>Risk: <span class="metric-val" id="risk-LIGHT-001">10.0</span></div>
+                    </div>
+                    <div class="device-footer">
+                        <span class="decision-badge badge-allow" id="dec-LIGHT-001">ALLOW</span>
+                        <span class="enforce-badge status-executed" id="enf-LIGHT-001">EXECUTED</span>
+                    </div>
+                </div>
+
+                <div class="device-card" id="card-THERMOSTAT-001">
+                    <div class="device-header">
+                        <span class="device-name">Smart Thermostat</span>
+                        <span class="sensitivity-tag sens-medium">MEDIUM</span>
+                    </div>
+                    <div class="device-id">THERMOSTAT-001</div>
+                    <div class="device-state-display state-active" id="state-THERMOSTAT-001">TEMP: 22.0°C (ECO: OFF)</div>
+                    <div class="device-metrics">
+                        <div>Trust: <span class="metric-val" id="trust-THERMOSTAT-001">80.0</span></div>
+                        <div>Risk: <span class="metric-val" id="risk-THERMOSTAT-001">12.0</span></div>
+                    </div>
+                    <div class="device-footer">
+                        <span class="decision-badge badge-allow" id="dec-THERMOSTAT-001">ALLOW</span>
+                        <span class="enforce-badge status-executed" id="enf-THERMOSTAT-001">EXECUTED</span>
+                    </div>
+                </div>
+
+                <div class="device-card" id="card-CAM-001">
+                    <div class="device-header">
+                        <span class="device-name">Security Camera</span>
+                        <span class="sensitivity-tag sens-high">HIGH</span>
+                    </div>
+                    <div class="device-id">CAM-001 / CAMERA-001</div>
+                    <div class="device-state-display state-standby" id="state-CAM-001">STANDBY (PRIVATE)</div>
+                    <div class="device-metrics">
+                        <div>Trust: <span class="metric-val" id="trust-CAM-001">80.0</span></div>
+                        <div>Risk: <span class="metric-val" id="risk-CAM-001">35.0</span></div>
+                    </div>
+                    <div class="device-footer">
+                        <span class="decision-badge badge-deny" id="dec-CAM-001">DENY</span>
+                        <span class="enforce-badge status-blocked" id="enf-CAM-001">BLOCKED</span>
+                    </div>
+                </div>
+
+                <div class="device-card" id="card-ROUTER-001">
+                    <div class="device-header">
+                        <span class="device-name">Core Gateway Router</span>
+                        <span class="sensitivity-tag sens-critical">CRITICAL</span>
+                    </div>
+                    <div class="device-id">ROUTER-001</div>
+                    <div class="device-state-display state-protected" id="state-ROUTER-001">PROTECTED (ADMIN ONLY)</div>
+                    <div class="device-metrics">
+                        <div>Trust: <span class="metric-val" id="trust-ROUTER-001">80.0</span></div>
+                        <div>Risk: <span class="metric-val" id="risk-ROUTER-001">75.0</span></div>
+                    </div>
+                    <div class="device-footer">
+                        <span class="decision-badge badge-deny" id="dec-ROUTER-001">DENY</span>
+                        <span class="enforce-badge status-blocked" id="enf-ROUTER-001">BLOCKED</span>
+                    </div>
+                </div>
+
+                <div class="device-card" id="card-OWNER-001">
+                    <div class="device-header">
+                        <span class="device-name">Smart Curtains / Owner</span>
+                        <span class="sensitivity-tag sens-critical">CRITICAL</span>
+                    </div>
+                    <div class="device-id">OWNER-001 / CURTAIN-001</div>
+                    <div class="device-state-display state-closed" id="state-OWNER-001">CLOSED / RESTRICTED</div>
+                    <div class="device-metrics">
+                        <div>Trust: <span class="metric-val" id="trust-OWNER-001">80.0</span></div>
+                        <div>Risk: <span class="metric-val" id="risk-OWNER-001">20.0</span></div>
+                    </div>
+                    <div class="device-footer">
+                        <span class="decision-badge badge-deny" id="dec-OWNER-001">DENY</span>
+                        <span class="enforce-badge status-blocked" id="enf-OWNER-001">BLOCKED</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dynamic Trust & Contextual Risk Telemetry Panels -->
+        <div class="two-col-grid">
+            
+            <!-- Trust Panel -->
+            <section class="panel trust-panel" id="trustPanel">
+                <div class="panel-header">
+                    <h2>Gate 2: Dynamic Trust Telemetry (/topic/trust)</h2>
+                    <span class="panel-subtitle">Continuous Behavioral Reputation Scoring</span>
+                </div>
+                <div class="telemetry-summary">
+                    <div class="score-display">
+                        <div class="score-num score-trust" id="trustScoreNum">80.0</div>
+                        <div class="score-meta">
+                            <span class="status-tag status-trusted" id="trustStatusTag">TRUSTED</span>
+                            <span class="delta-tag" id="trustDeltaTag">Δ 0.0</span>
+                        </div>
+                    </div>
+                    <div class="telemetry-details">
+                        <div>Device: <strong id="trustDevice">DOOR-SENSOR-001</strong></div>
+                        <div>Last Event: <span id="trustEventType">NORMAL_SUCCESS</span></div>
+                        <div>Source: <span id="trustSource">SYSTEM</span></div>
+                        <div>Updated: <span id="trustTimestamp">Initial Baseline</span></div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-title">Real-Time Trust Score History</div>
+                    <svg class="sparkline" id="trustSparkline" viewBox="0 0 400 80" preserveAspectRatio="none">
+                        <path id="trustSparklinePath" d="M 0 30 L 400 30" fill="none" stroke="#2563eb" stroke-width="2.5" />
+                    </svg>
+                </div>
+            </section>
+
+            <!-- Risk Panel -->
+            <section class="panel risk-panel" id="riskPanel">
+                <div class="panel-header">
+                    <h2>Gate 3: Contextual Risk Telemetry (/topic/risk)</h2>
+                    <span class="panel-subtitle">Multi-Dimensional Environmental Assessment</span>
+                </div>
+                <div class="telemetry-summary">
+                    <div class="score-display">
+                        <div class="score-num score-risk" id="riskScoreNum">14.0</div>
+                        <div class="score-meta">
+                            <span class="status-tag status-low" id="riskStatusTag">LOW RISK</span>
+                            <span class="delta-tag" id="riskLevelTag">NORMAL</span>
+                        </div>
+                    </div>
+                    <div class="telemetry-details">
+                        <div>Resource: <strong id="riskResource">SMART_DOOR_LOCK</strong></div>
+                        <div>Operation: <span id="riskOperation">READ</span></div>
+                        <div>Location: <span id="riskLocation">Property-001</span></div>
+                        <div>Reason: <span id="riskReason">Standard operational parameters</span></div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-title">Real-Time Contextual Risk Score History</div>
+                    <svg class="sparkline" id="riskSparkline" viewBox="0 0 400 80" preserveAspectRatio="none">
+                        <path id="riskSparklinePath" d="M 0 60 L 400 60" fill="none" stroke="#f59e0b" stroke-width="2.5" />
+                    </svg>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- Live Authorization Feed & Smart Contract Proofs -->
+        <div class="two-col-grid">
+
+            <!-- Authorization Feed -->
+            <section class="panel auth-panel" id="authPanel">
+                <div class="panel-header">
+                    <h2>Gate 4 & 5: Authorization & Enforcement Feed (/topic/authorization)</h2>
+                    <span class="panel-subtitle">Real-Time Access Decisions & Execution Outcomes</span>
+                </div>
+                <div class="table-container">
+                    <table class="data-table" id="authTable">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Device</th>
+                                <th>Operation</th>
+                                <th>Trust / Risk</th>
+                                <th>Decision</th>
+                                <th>Enforcement</th>
+                                <th>Effective Op</th>
+                            </tr>
+                        </thead>
+                        <tbody id="authTableBody">
+                            <tr>
+                                <td colspan="7" class="empty-table">Awaiting real-time authorization events...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Blockchain Proof Panel -->
+            <section class="panel blockchain-panel" id="blockchainPanel">
+                <div class="panel-header">
+                    <h2>Gate 4: Blockchain Smart Contract Proofs (/topic/blockchain)</h2>
+                    <span class="panel-subtitle">Ganache Immutable Authorization Evidence</span>
+                </div>
+                <div class="blockchain-proofs-feed" id="blockchainProofsFeed">
+                    <div class="empty-proofs" id="emptyProofs">Awaiting on-chain smart contract transactions...</div>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- Security Alerts Panel -->
+        <section class="panel security-panel" id="securityPanel">
+            <div class="panel-header">
+                <h2>Security Alert Stream (/topic/security)</h2>
+                <span class="panel-subtitle">Real-Time Threat Detection & Mitigation Broadcasts</span>
+            </div>
+            <div class="alerts-container" id="securityAlertsContainer">
+                <div class="no-alerts" id="noAlertsMsg">No active security alerts detected. System operating normally.</div>
+            </div>
+        </section>
+
+        <!-- Unified Event Timeline & Correlation Trace Explorer -->
+        <section class="panel timeline-panel" id="timelinePanel">
+            <div class="panel-header">
+                <div class="timeline-title-group">
+                    <h2>Unified Event Timeline</h2>
+                    <span class="panel-subtitle">Chronological Pipeline Trace (Max 200 Events)</span>
+                </div>
+                <div class="correlation-search-group">
+                    <input type="text" id="corrSearchInput" placeholder="Filter by Correlation ID..." class="search-input" onkeyup="filterTimeline()">
+                    <button class="btn btn-sm btn-outline" onclick="clearTimelineFilter()">Clear</button>
+                </div>
+            </div>
+            <div class="timeline-container" id="timelineContainer">
+                <div class="empty-timeline" id="emptyTimeline">Timeline ready. Events will stream in real-time as scenarios execute.</div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="dashboard-footer">
+        <p>TrustABAC-IoT Research Prototype — Phase 7E Real-Time Monitoring Dashboard</p>
+        <p class="footer-sub">Spring Boot • Thymeleaf • Vanilla CSS • JavaScript • STOMP over WebSocket • Spring AMQP RabbitMQ • Web3j & Ganache</p>
+    </footer>
+
+    <script th:src="@{/js/dashboard.js(v=${serverTime})}" src="/js/dashboard.js?v=demo2"></script>
+</body>
+</html>
