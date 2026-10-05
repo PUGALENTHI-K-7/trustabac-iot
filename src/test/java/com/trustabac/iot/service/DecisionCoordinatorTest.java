@@ -235,4 +235,59 @@ class DecisionCoordinatorTest {
         assertThat(response.decisionReason()).contains("Fail-Closed Security Enforcement");
         assertThat(response.blockchainTransactionHash()).isNull();
     }
+
+    @Test
+    @DisplayName("Expired booking should fail at ABAC Gate, return DENY, and never call Blockchain")
+    void shouldDenyWhenBookingExpired() {
+        // Create an expired booking
+        Booking expiredBooking = new Booking("BOOK-EXPIRED-99", "Property-001", "Guest-001",
+                LocalDateTime.of(2026, 9, 1, 0, 0),
+                LocalDateTime.of(2026, 9, 5, 23, 59),
+                BookingStatus.ACTIVE);
+        bookingRepository.save(expiredBooking);
+
+        BlockchainAuthorizationRequest request = new BlockchainAuthorizationRequest(
+                "DEV-DOOR-001", "Guest-001", "GUEST", "SmartRental",
+                "SMART_DOOR_LOCK", "CONTROL", "Property-001", "BOOK-EXPIRED-99", "LOCAL_WIFI",
+                null, null, null, "REQ-EXPIRED-BOOK"
+        );
+
+        BlockchainAuthorizationResponse response = coordinator.evaluateAuthorization(request);
+
+        assertThat(response.abacResult()).isEqualTo("FAIL");
+        assertThat(response.finalDecision()).isEqualTo(Decision.DENY);
+        assertThat(response.blockchainTransactionHash()).isNull();
+        assertThat(response.trustScore()).isNull();
+        assertThat(response.riskScore()).isNull();
+
+        // Trust untouched
+        Device dev = deviceRepository.findByDeviceIdentifier("DEV-DOOR-001").orElseThrow();
+        assertThat(dev.getCurrentTrust()).isEqualTo(85.0);
+
+        // Zero blockchain interactions
+        Mockito.verifyNoInteractions(mockBlockchainService);
+    }
+
+    @Test
+    @DisplayName("Wrong property booking should fail at ABAC Gate, return DENY, and never call Blockchain")
+    void shouldDenyWhenBookingWrongProperty() {
+        Booking wrongPropBooking = new Booking("BOOK-WRONG-PROP", "OtherProperty-999", "Guest-001",
+                LocalDateTime.of(2026, 9, 20, 0, 0),
+                LocalDateTime.of(2026, 9, 25, 23, 59),
+                BookingStatus.ACTIVE);
+        bookingRepository.save(wrongPropBooking);
+
+        BlockchainAuthorizationRequest request = new BlockchainAuthorizationRequest(
+                "DEV-DOOR-001", "Guest-001", "GUEST", "SmartRental",
+                "SMART_DOOR_LOCK", "CONTROL", "Property-001", "BOOK-WRONG-PROP", "LOCAL_WIFI",
+                null, null, null, "REQ-WRONG-PROP"
+        );
+
+        BlockchainAuthorizationResponse response = coordinator.evaluateAuthorization(request);
+
+        assertThat(response.abacResult()).isEqualTo("FAIL");
+        assertThat(response.finalDecision()).isEqualTo(Decision.DENY);
+        assertThat(response.blockchainTransactionHash()).isNull();
+        Mockito.verifyNoInteractions(mockBlockchainService);
+    }
 }

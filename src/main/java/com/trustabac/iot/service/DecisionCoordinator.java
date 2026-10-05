@@ -200,7 +200,7 @@ public class DecisionCoordinator {
         if (bookingId == null || bookingId.isBlank()) {
             return false;
         }
-        return abacRes.getReason() == null || !abacRes.getReason().toLowerCase().contains("booking");
+        return Boolean.TRUE.equals(abacRes.getBookingValid());
     }
 
     private int mapSensitivityCode(ResourceSensitivity sensitivity) {

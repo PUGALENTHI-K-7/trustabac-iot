@@ -71,14 +71,13 @@ v1.0.0  ──────── Current Baseline (research prototype complete)
 
 **Goal**: Improve operational security, eliminate fragile heuristics, and harden the messaging pipeline.
 
-### v1.2.0 — Booking Active Logic Fix
+### v1.2.0 — Structured Booking Validity (Completed)
 
-#### [MODIFY] `service/DecisionCoordinator.java` — `isBookingActive()` method
-- **Current**: Determines booking active status by checking if ABAC reason string contains "booking" (string heuristic)
-- **Fix**: Introduce an explicit boolean field in `AccessEvaluationResponse` (e.g., `bookingValid`) and set it in `AbacService`
-- **Risk**: MEDIUM — requires coordination between AbacService and DecisionCoordinator; affects all authorization flows
-- **Affected files**: `DecisionCoordinator.java`, `AbacService.java`, `AccessEvaluationResponse.java`
-- **Validation**: `DecisionCoordinatorTest.java`, `AbacServiceTest.java`, integration tests
+#### [MODIFIED] `service/DecisionCoordinator.java`, `service/AbacService.java`, `dto/AccessEvaluationResponse.java`
+- **Implemented**: Structured `bookingValid` (`Boolean`) signal exposed in `AccessEvaluationResponse`.
+- **Eliminated**: String heuristic (`toLowerCase().contains("booking")`) removed from `DecisionCoordinator.isBookingActive()`.
+- **Guaranteed**: Booking validity verified at Gate 1 (ABAC eligibility); invalid/expired bookings fail immediately with `DENY` and bypass Trust mutation, Risk computation, and Blockchain transactions.
+- **Validation**: 215/215 Maven unit tests PASS (+5 tests), 45/45 Phase 8C PASS, 15/15 Smoke test PASS, live ALLOW/RESTRICT/POST_CHECKOUT regressions verified.
 
 ### v1.2.1 — Persistent Idempotency
 

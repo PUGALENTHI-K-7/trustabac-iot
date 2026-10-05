@@ -780,19 +780,37 @@ As part of the v1.1.0 stabilization milestone, the 7 verified repository inconsi
 
 ---
 
-## 29. Final Current-State Assessment
+## 29. v1.1.1 Patch Release Status
+
+The v1.1.1 patch release resolved test-time clock determinism:
+- Propagated authoritative evaluation timestamp through `DecisionCoordinator` to `AccessEvaluationRequest`, ensuring `AbacService` evaluates booking validity with the coordinator's fixed test clock.
+- Achieved 210/210 passing Maven tests with 0 failures and 0 errors across all environments.
+
+---
+
+## 30. v1.2.0 Structured Booking Validity Improvement
+
+As part of the v1.2.0 release, the authorization-correctness pipeline was strengthened by eliminating string-parsing heuristics:
+- **Explicit Booking Validity Signal**: `AccessEvaluationResponse` now exposes a structured `bookingValid` (`Boolean`) field reflecting authoritative server-side booking evaluation.
+- **Elimination of String Heuristic**: Removed string-parsing logic (`abacRes.getReason().toLowerCase().contains("booking")`) in `DecisionCoordinator.isBookingActive()`; booking state is now driven directly by `Boolean.TRUE.equals(abacRes.getBookingValid())`.
+- **ABAC Eligibility Guard**: Invalid, expired, non-started, or wrong-property bookings fail at Gate 1 (ABAC eligibility) and are immediately short-circuited (returning `DENY` without invoking Trust mutation, Risk computation, or blockchain transactions).
+- **Test Suite**: Expanded test coverage to 215 tests (+5 focused tests across `AbacServiceTest` and `DecisionCoordinatorTest`), 0 failures, 0 errors.
+
+---
+
+## 31. Final Current-State Assessment
 
 | Dimension | Assessment |
 | :--- | :--- |
 | **Implementation completeness** | All 10 phases implemented. 88 Java source files. |
 | **Smart contract** | Solidity ^0.8.20, correctly authored, ABI/BIN committed. |
 | **Experiments** | 720 measured samples, frozen, hash-verified. |
-| **Test coverage** | 210 Maven tests + 10 Python integration suites (all passing). |
-| **Git state** | Maintained clean history; v1.0.0 preserved; v1.1.0 stabilization applied. |
-| **Security hygiene** | v1.0.0 baseline: 302 files (0 findings); v1.1.0 current: 317 files (0 findings). |
+| **Test coverage** | 215 Maven tests + 10 Python integration suites (all passing). |
+| **Git state** | Maintained clean history; v1.0.0, v1.1.0, v1.1.1 preserved; v1.2.0 applied. |
+| **Security hygiene** | v1.0.0 baseline: 302 files (0 findings); v1.1.0/v1.2.0: 317 files (0 findings). |
 | **Documentation** | 12 thesis chapters, viva Q&A, demo scripts, submission checklist (all version-synchronized). |
-| **Inconsistencies** | 7 verified inconsistencies identified and resolved in v1.1.0. |
+| **Booking Validity** | Strongly-typed `bookingValid` boolean signal; no string parsing in authorization logic. |
 | **Research positioning** | Accurately scoped as prototype with controlled evaluation. |
 | **Demo readiness** | Ready for native-launch demo via `START_DEMO.bat` / `start-demo.ps1`. |
 
-**PROJECT STATUS (v1.1.0): STABILIZED RESEARCH PROTOTYPE — CONSISTENT CONFIGURATION, CLEAN REPRODUCIBILITY, PRESERVED RESEARCH BASELINE.**
+**PROJECT STATUS (v1.2.0): STABILIZED RESEARCH PROTOTYPE — STRUCTURED AUTHORIZATION CORRECTNESS, PRESERVED RESEARCH BASELINE.**

@@ -10,7 +10,7 @@
 
 | Component | Location | Responsibility | Status | Notes |
 | :--- | :--- | :--- | :--- | :--- |
-| **DecisionCoordinator** | `service/DecisionCoordinator.java` | Orchestrates the full 4-gate pipeline: ABAC → Trust lookup → Risk → Blockchain → audit persistence | ✅ COMPLETE | Fail-closed on blockchain unavailability |
+| **DecisionCoordinator** | `service/DecisionCoordinator.java` | Orchestrates the full 4-gate pipeline: ABAC → Trust lookup → Risk → Blockchain → audit persistence | ✅ COMPLETE | Fail-closed on blockchain unavailability; v1.2.0 uses structured bookingValid signal (no string heuristic) |
 | **AbacService** | `service/AbacService.java` | Gate 1: ABAC eligibility evaluation (device, policy, booking, attributes) | ✅ COMPLETE | Returns PASS/FAIL; FAIL short-circuits all downstream gates |
 | **TrustService** | `service/TrustService.java` | Gate 2: Trust score retrieval, delta updates, append-only history | ✅ COMPLETE | Read-only in authorization pipeline; TrustService mutates trust via explicit events |
 | **RiskService** | `service/RiskService.java` | Gate 3: 7-factor weighted composite risk evaluation + RiskEvent persistence | ✅ COMPLETE | Risk is orthogonal to Trust |

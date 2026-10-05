@@ -313,12 +313,20 @@ Full prototype with 10 phases implemented, controlled experiment (720 samples), 
 - Experiment and test script container name corrections
 - Frozen research dataset and methodology strictly preserved
 
-### v1.2.x (Near-term — Security & Robustness)
+### v1.1.1 (Patch Milestone — Completed)
+- Deterministic test clock fix: Authoritative evaluation timestamp propagated through `DecisionCoordinator` to `AccessEvaluationRequest`, ensuring deterministic booking validity evaluations in Maven test suites (210/210 PASS).
+
+### v1.2.0 (Authorization Correctness Milestone — Completed)
+- Structured booking validity: Added strongly typed `bookingValid` (`Boolean`) signal to `AccessEvaluationResponse`.
+- Eliminated fragile string parsing (`toLowerCase().contains("booking")`) in `DecisionCoordinator.isBookingActive()`.
+- Invalid/expired bookings cleanly fail at Gate 1 (ABAC eligibility) short-circuiting downstream Trust, Risk, and Blockchain transactions.
+- Test suite expanded to 215 tests (+5 tests).
+
+### v1.3.x (Near-term — Security & Robustness)
 - Persistent database-backed idempotency (replace in-memory `IdempotencyGuard`)
 - Replay protection (nonce or timestamp window)
 - Configurable enforcement rules (externalize from hardcoded Java switch)
 - Authentication/authorization layer for the REST API
-- Booking active boolean representation in ABAC response
 
 ### v1.3.x (Research Extensions)
 - Multi-repetition concurrent benchmarking

@@ -34,6 +34,9 @@ public class AccessEvaluationResponse {
     private RiskFactorBreakdown riskFactors;
     private String riskReason;
 
+    // Structured Booking Validity Signal
+    private Boolean bookingValid;
+
     public AccessEvaluationResponse() {
     }
 
@@ -59,6 +62,17 @@ public class AccessEvaluationResponse {
                                   Operation operation, Double trustScore, String trustStatus,
                                   Double riskScore, RiskStatus riskStatus, RiskFactorBreakdown riskFactors,
                                   String riskReason) {
+        this(requestId, result, reason, evaluatedPolicyName, evaluationTimestamp,
+                deviceIdentifier, userId, resource, operation, trustScore, trustStatus,
+                riskScore, riskStatus, riskFactors, riskReason, null);
+    }
+
+    public AccessEvaluationResponse(Long requestId, AbacResult result, String reason,
+                                  String evaluatedPolicyName, LocalDateTime evaluationTimestamp,
+                                  String deviceIdentifier, String userId, String resource,
+                                  Operation operation, Double trustScore, String trustStatus,
+                                  Double riskScore, RiskStatus riskStatus, RiskFactorBreakdown riskFactors,
+                                  String riskReason, Boolean bookingValid) {
         this.requestId = requestId;
         this.result = result;
         this.reason = reason;
@@ -74,6 +88,7 @@ public class AccessEvaluationResponse {
         this.riskStatus = riskStatus;
         this.riskFactors = riskFactors;
         this.riskReason = riskReason;
+        this.bookingValid = bookingValid;
     }
 
     public Long getRequestId() {
@@ -194,5 +209,13 @@ public class AccessEvaluationResponse {
 
     public void setRiskReason(String riskReason) {
         this.riskReason = riskReason;
+    }
+
+    public Boolean getBookingValid() {
+        return bookingValid;
+    }
+
+    public void setBookingValid(Boolean bookingValid) {
+        this.bookingValid = bookingValid;
     }
 }

@@ -89,21 +89,21 @@ public class AbacService {
         if (deviceOpt.isEmpty()) {
             return recordAndRespond(request, evaluationTimestamp, AbacResult.FAIL,
                     "Device '" + request.getDeviceIdentifier() + "' is not registered in the gateway inventory",
-                    null, null);
+                    null, null, null);
         }
 
         Device device = deviceOpt.get();
         if (!Boolean.TRUE.equals(device.getActive())) {
             return recordAndRespond(request, evaluationTimestamp, AbacResult.FAIL,
                     "Device '" + request.getDeviceIdentifier() + "' is inactive",
-                    null, device);
+                    null, device, null);
         }
 
         if (device.getRegistrationStatus() != RegistrationStatus.REGISTERED) {
             return recordAndRespond(request, evaluationTimestamp, AbacResult.FAIL,
                     "Device '" + request.getDeviceIdentifier() + "' registration status is "
                             + device.getRegistrationStatus() + " and is ineligible for access",
-                    null, device);
+                    null, device, null);
         }
 
         // 3. Context resolution: Booking validity check
@@ -130,7 +130,7 @@ public class AbacService {
             return recordAndRespond(request, evaluationTimestamp, AbacResult.FAIL,
                     String.format("No active policy applies to resource '%s' and operation '%s'",
                             request.getResource(), request.getOperation()),
-                    null, device);
+                    null, device, isBookingValid);
         }
 
         // 6. Evaluate candidate policies deterministically
@@ -142,7 +142,7 @@ public class AbacService {
                 log.info("ABAC PASS: user='{}' device='{}' resource='{}' op='{}' policy='{}'",
                         request.getUserId(), request.getDeviceIdentifier(), request.getResource(),
                         request.getOperation(), candidate.getName());
-                return recordAndRespond(request, evaluationTimestamp, AbacResult.PASS, passReason, candidate.getName(), device);
+                return recordAndRespond(request, evaluationTimestamp, AbacResult.PASS, passReason, candidate.getName(), device, isBookingValid);
             } else {
                 failureExplanations.add(String.format("Policy '%s': %s", candidate.getName(), evalResult.reason()));
             }
@@ -161,7 +161,7 @@ public class AbacService {
                 .map(Policy::getName)
                 .collect(Collectors.joining(", "));
 
-        return recordAndRespond(request, evaluationTimestamp, AbacResult.FAIL, aggregatedReason, evaluatedPolicyNames, device);
+        return recordAndRespond(request, evaluationTimestamp, AbacResult.FAIL, aggregatedReason, evaluatedPolicyNames, device, isBookingValid);
     }
 
     @Transactional(readOnly = true)
@@ -240,7 +240,8 @@ public class AbacService {
                                                       AbacResult result,
                                                       String reason,
                                                       String policyName,
-                                                      Device device) {
+                                                      Device device,
+                                                      Boolean bookingValid) {
         String truncatedReason = reason != null && reason.length() > 500
                 ? reason.substring(0, 497) + "..."
                 : reason;
@@ -321,7 +322,8 @@ public class AbacService {
                 riskScore,
                 riskStatus,
                 riskFactors,
-                riskReason
+                riskReason,
+                bookingValid
         );
     }
 

@@ -48,6 +48,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -539,5 +540,72 @@ class AbacServiceTest {
 
         // CRITICAL: Device trust remains 85.0 (unmutated by high contextual risk)
         assertEquals(85.0, activeDoorLock.getCurrentTrust());
+    }
+
+    @Test
+    @DisplayName("Structured booking validity: Valid booking exposes bookingValid=true")
+    void testStructuredBookingValidityTrueOnValidBooking() {
+        when(deviceRepository.findByDeviceIdentifier("DEV-DOOR-001")).thenReturn(Optional.of(activeDoorLock));
+        when(bookingService.findByBookingReference("BOOK-001")).thenReturn(Optional.of(validBooking));
+        when(bookingService.isBookingValid(any(Booking.class), any(LocalDateTime.class), eq("Property-001"))).thenReturn(true);
+        when(policyRepository.findByActiveTrue()).thenReturn(List.of(guestDoorPolicy));
+        mockRiskEvaluation(14.0, RiskStatus.LOW);
+
+        AccessEvaluationRequest request = new AccessEvaluationRequest(
+                "DEV-DOOR-001", "Guest-001", "GUEST", "SmartRental",
+                "SMART_DOOR_LOCK", "SMART_DOOR_LOCK", null,
+                Operation.CONTROL, "Property-001", "BOOK-001", "LOCAL_WIFI", baseTime
+        );
+
+        AccessEvaluationResponse response = abacService.evaluateAccess(request);
+
+        assertEquals(AbacResult.PASS, response.getResult());
+        assertEquals(Boolean.TRUE, response.getBookingValid());
+    }
+
+    @Test
+    @DisplayName("Structured booking validity: Expired booking exposes bookingValid=false and ABAC FAIL")
+    void testStructuredBookingValidityFalseOnExpiredBooking() {
+        when(deviceRepository.findByDeviceIdentifier("DEV-DOOR-001")).thenReturn(Optional.of(activeDoorLock));
+        when(bookingService.findByBookingReference("BOOK-EXPIRED")).thenReturn(Optional.of(validBooking));
+        when(bookingService.isBookingValid(any(Booking.class), any(LocalDateTime.class), anyString())).thenReturn(false);
+        when(policyRepository.findByActiveTrue()).thenReturn(List.of(guestDoorPolicy));
+
+        AccessEvaluationRequest request = new AccessEvaluationRequest(
+                "DEV-DOOR-001", "Guest-001", "GUEST", "SmartRental",
+                "SMART_DOOR_LOCK", "SMART_DOOR_LOCK", null,
+                Operation.CONTROL, "Property-001", "BOOK-EXPIRED", "LOCAL_WIFI", baseTime
+        );
+
+        AccessEvaluationResponse response = abacService.evaluateAccess(request);
+
+        assertEquals(AbacResult.FAIL, response.getResult());
+        assertEquals(Boolean.FALSE, response.getBookingValid());
+        assertNull(response.getTrustScore());
+        assertNull(response.getRiskScore());
+        verify(riskService, never()).evaluateRisk(any());
+    }
+
+    @Test
+    @DisplayName("Structured booking validity: Wrong property location exposes bookingValid=false and ABAC FAIL")
+    void testStructuredBookingValidityFalseOnWrongLocation() {
+        when(deviceRepository.findByDeviceIdentifier("DEV-DOOR-001")).thenReturn(Optional.of(activeDoorLock));
+        when(bookingService.findByBookingReference("BOOK-001")).thenReturn(Optional.of(validBooking));
+        when(bookingService.isBookingValid(any(Booking.class), any(LocalDateTime.class), eq("Wrong-Property"))).thenReturn(false);
+        when(policyRepository.findByActiveTrue()).thenReturn(List.of(guestDoorPolicy));
+
+        AccessEvaluationRequest request = new AccessEvaluationRequest(
+                "DEV-DOOR-001", "Guest-001", "GUEST", "SmartRental",
+                "SMART_DOOR_LOCK", "SMART_DOOR_LOCK", null,
+                Operation.CONTROL, "Wrong-Property", "BOOK-001", "LOCAL_WIFI", baseTime
+        );
+
+        AccessEvaluationResponse response = abacService.evaluateAccess(request);
+
+        assertEquals(AbacResult.FAIL, response.getResult());
+        assertEquals(Boolean.FALSE, response.getBookingValid());
+        assertNull(response.getTrustScore());
+        assertNull(response.getRiskScore());
+        verify(riskService, never()).evaluateRisk(any());
     }
 }
