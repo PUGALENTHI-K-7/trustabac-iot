@@ -81,7 +81,7 @@ print(f"  PRE-OUTAGE: {'PASS' if pre_decision in ('ALLOW','RESTRICT') else 'WARN
 
 # ── STOP GANACHE ─────────────────────────────────────────────
 banner("STEP 2 - STOP GANACHE CONTAINER")
-rc, out, err = docker("stop ganache-trustabac")
+rc, out, err = docker("stop trustabac-ganache")
 print(f"  docker stop rc={rc} out={out}")
 print("  Waiting 5s for Ganache to fully stop...")
 time.sleep(5)
@@ -106,7 +106,7 @@ print(f"\n  FAIL-CLOSED: {'PASS - DENY with no tx hash' if fail_closed else 'FAI
 
 # ── RESTART GANACHE ──────────────────────────────────────────
 banner("STEP 4 - RESTART GANACHE CONTAINER")
-rc2, out2, err2 = docker("start ganache-trustabac")
+rc2, out2, err2 = docker("start trustabac-ganache")
 print(f"  docker start rc={rc2} out={out2}")
 print("  Waiting 8s for Ganache to be ready...")
 time.sleep(8)

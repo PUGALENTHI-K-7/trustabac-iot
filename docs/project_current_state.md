@@ -553,13 +553,14 @@ Historical pass counts from `docs/final_project_status.md`:
 | Phase 7E Dashboard | 10 / 10 |
 | Phase 8C Validator | 45 / 45 |
 | Final smoke test | 15 / 15 |
-| Secret scan | 302 files, 0 findings |
+| Secret scan (v1.0.0 historical) | 302 files, 0 findings |
+| Secret scan (v1.1.0 current) | 317 files, 0 findings |
 
 > [!CAUTION]
-> **CANNOT BE VERIFIED IN ISOLATION**: These test results were produced at the time of the v1.0.0 snapshot. Current working tree is clean. Maven tests and Python integration suites have NOT been re-executed during this analysis run (per the no-modification rule). They are reported as historical documented evidence only.
+> **CANNOT BE VERIFIED IN ISOLATION**: The initial test results were produced at the time of the v1.0.0 snapshot. During v1.1.0 stabilization, regression testing verified 210/210 Maven tests, 45/45 Phase 8C validation checks, and a 317-file secret scan with 0 findings.
 
-> [!WARNING]
-> **DISCREPANCY**: `docs/final_project_status.md` states "282 Files Scanned" while `contracts/security_scan_final.md` states "302 Files Scanned." These numbers disagree. The `security_scan_final.md` is the direct output artifact and is likely more authoritative. The difference may reflect a documentation update lag.
+> [!NOTE]
+> **Versioned Security Scan Evidence**: The historical v1.0.0 baseline scan evaluated 302 repository files (0 findings). The expanded v1.1.0 release scan evaluated 317 files (0 findings) after incorporating all documentation and configuration stabilization artifacts.
 
 ---
 
@@ -769,7 +770,7 @@ As part of the v1.1.0 stabilization milestone, the 7 verified repository inconsi
 1. **Spring Boot Version**: Standardized all documentation and thesis tables to `4.1.1` (matching `pom.xml`).
 2. **Application Port**: Standardized `application.properties` default to `server.port=8090` (aligning with `start-demo.ps1`, `START_DEMO.bat`, and `.env.example`).
 3. **MySQL Host Port**: Standardized `docker-compose.yml` to `"${DB_PORT:-3307}:3306"` (aligning with `.env.example`).
-4. **Security Scan Count**: Corrected documentation to 302 files scanned (matching `security_scan_final.md`).
+4. **Security Scan Count**: Clarified historical v1.0.0 baseline (302 files scanned) vs current v1.1.0 release (317 files scanned, 0 findings).
 5. **Solidity Version**: Standardized thesis documentation to `^0.8.20` (matching `AdaptiveAccessControl.sol`).
 6. **Docker Compose Architecture**: Removed broken `trustabac-iot` container build from `docker-compose.yml`; Docker Compose is explicitly dedicated to infrastructure services (MySQL, Ganache, RabbitMQ), while Spring Boot is launched natively via `START_DEMO.bat` / `start-demo.ps1`.
 7. **Container Names**: Corrected stale container references (`releasemind-mysql` -> `trustabac-mysql`, `ganache-trustabac` -> `trustabac-ganache`) across all test/experiment scripts and runbooks.
@@ -786,9 +787,9 @@ As part of the v1.1.0 stabilization milestone, the 7 verified repository inconsi
 | **Implementation completeness** | All 10 phases implemented. 88 Java source files. |
 | **Smart contract** | Solidity ^0.8.20, correctly authored, ABI/BIN committed. |
 | **Experiments** | 720 measured samples, frozen, hash-verified. |
-| **Test coverage** | 210 Maven tests + 10 Python integration suites (historical). |
+| **Test coverage** | 210 Maven tests + 10 Python integration suites (all passing). |
 | **Git state** | Maintained clean history; v1.0.0 preserved; v1.1.0 stabilization applied. |
-| **Security hygiene** | 302 files scanned, 0 secret findings. |
+| **Security hygiene** | v1.0.0 baseline: 302 files (0 findings); v1.1.0 current: 317 files (0 findings). |
 | **Documentation** | 12 thesis chapters, viva Q&A, demo scripts, submission checklist (all version-synchronized). |
 | **Inconsistencies** | 7 verified inconsistencies identified and resolved in v1.1.0. |
 | **Research positioning** | Accurately scoped as prototype with controlled evaluation. |

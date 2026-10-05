@@ -1,4 +1,4 @@
-# TrustABAC-IoT — Review 2 Slide Deck
+﻿# TrustABAC-IoT — Review 2 Slide Deck
 ## "Adaptive Trust- and Risk-Aware Smart-Contract Access Control for Resource-Constrained IoT Networks"
 
 **Course**: Final-Year Project (MIC)
@@ -430,9 +430,9 @@ batch_run_audit table
 | 6 | Show ALLOW + tx hash | Dashboard event log |
 | 7 | Run RESTRICT scenario | `POST /api/simulator/scenarios/RESTRICT_ENFORCEMENT/run` |
 | 8 | Run LOW_TRUST attack | `POST /api/simulator/scenarios/LOW_TRUST_ATTACK/run` |
-| 9 | Simulate outage | `docker pause ganache-trustabac` |
+| 9 | Simulate outage | `docker pause trustabac-ganache` |
 | 10 | Show Fail-Closed DENY | Submit request → 0.1 ms DENY |
-| 11 | Restore Ganache | `docker unpause ganache-trustabac` |
+| 11 | Restore Ganache | `docker unpause trustabac-ganache` |
 | 12 | Run Batch Audit | `POST /api/batch/audit/trigger?periodKey=DEMO_01` |
 | 13 | Reset | `POST /api/simulator/reset` |
 

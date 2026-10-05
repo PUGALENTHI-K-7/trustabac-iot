@@ -1,4 +1,4 @@
-# TrustABAC-IoT — Review 2 Demo Commands Reference Card
+﻿# TrustABAC-IoT — Review 2 Demo Commands Reference Card
 
 **Quick reference for live demo execution**
 **Team:** 24MIC0082 Pugalenthi · 24MIC0025 Bharath
@@ -55,13 +55,13 @@ Invoke-RestMethod -Uri "http://localhost:8090/api/simulator/scenarios/UNAUTHORIZ
 
 ```powershell
 # 1. Pause Ganache (simulate outage)
-docker pause ganache-trustabac
+docker pause trustabac-ganache
 
 # 2. Try access during outage (will get 0.1ms DENY)
 Invoke-RestMethod -Uri "http://localhost:8090/api/simulator/scenarios/NORMAL_STAY/run" -Method POST -ContentType "application/json" -Body "{}"
 
 # 3. Restore Ganache
-docker unpause ganache-trustabac
+docker unpause trustabac-ganache
 
 # 4. Confirm recovery (will get ALLOW again)
 Invoke-RestMethod -Uri "http://localhost:8090/api/simulator/scenarios/NORMAL_STAY/run" -Method POST -ContentType "application/json" -Body "{}"

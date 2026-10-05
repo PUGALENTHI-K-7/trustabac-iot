@@ -214,7 +214,7 @@
 | **test_phase7f_batch.py** | `contracts/` | Batch analytics tests | ✅ COMPLETE | Results in final_project_status.md |
 | **validate_phase8c.py** | `contracts/` | 45-check research validator | ✅ COMPLETE | 45/45 pass |
 | **final_smoke_test.py** | `contracts/final_smoke_test.py` | 15-check comprehensive system smoke test | ✅ COMPLETE | 15/15 pass |
-| **security_scan_final.py** | `contracts/security_scan_final.py` | 302-file secret scanner | ✅ COMPLETE | 0 findings |
+| **security_scan_final.py** | `contracts/security_scan_final.py` | Secret scanner (v1.0.0: 302 files; v1.1.0: 317 files) | ✅ COMPLETE | 0 findings |
 
 ---
 
@@ -228,10 +228,9 @@
 | **stop-demo.ps1** | root | Graceful shutdown of JAR and Docker services | ✅ COMPLETE | |
 | **start-app.bat** | root | Alternative native app starter | ✅ COMPLETE | |
 | **start-daemon.cmd** | root | Daemon mode launcher | ✅ COMPLETE | |
-| **docker-compose.yml** | root | MySQL 8.0 + Ganache + RabbitMQ infrastructure | ✅ COMPLETE | ⚠ References Dockerfile that doesn't exist for Spring Boot service |
+| **docker-compose.yml** | root | MySQL 8.0 + Ganache + RabbitMQ infrastructure | ✅ COMPLETE | Dedicated to infrastructure services (host MySQL 3307) |
 | **ensure_contract_deployed.py** | `contracts/` | Checks/deploys smart contract on Ganache at startup | ✅ COMPLETE | |
 | **.env.example** | root | Environment template (tracked, secrets-free) | ✅ COMPLETE | |
-| **Dockerfile** | root | ❌ MISSING | ❌ MISSING | docker-compose service `trustabac-iot` cannot build without it |
 
 ---
 
@@ -252,7 +251,7 @@
 | **docs/reference_audit.md** | `docs/` | Verified bibliographic citations | ✅ COMPLETE | |
 | **docs/security_hardening_report.md** | `docs/` | Security audit findings and hardening steps | ✅ COMPLETE | |
 | **docs/submission_checklist.md** | `docs/` | Full deliverable sign-off checklist | ✅ COMPLETE | Updated to Spring Boot 4.1.1 |
-| **docs/final_project_status.md** | `docs/` | Final phase-by-phase status report | ✅ COMPLETE | Updated to 302 files scanned |
+| **docs/final_project_status.md** | `docs/` | Final phase-by-phase status report | ✅ COMPLETE | Updated to versioned scan (302 baseline / 317 current) |
 | **docs/local_runbook.md** | `docs/` | Clean-room reproducibility guide | ✅ COMPLETE | |
 | **docs/review2_demo_runbook.md** | `docs/` | Review 2 demo step guide | ✅ COMPLETE | Container names updated to trustabac-* |
 | **docs/viva_questions_and_answers.md** | `docs/` | 40+ viva Q&A preparation | ✅ COMPLETE | |

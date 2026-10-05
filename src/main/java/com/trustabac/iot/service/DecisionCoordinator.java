@@ -75,6 +75,7 @@ public class DecisionCoordinator {
             } catch (Exception ignored) {
             }
         }
+        abacReq.setRequestTimestamp(evaluationTimestamp);
 
         AccessEvaluationResponse abacRes = abacService.evaluateAccess(abacReq);
 

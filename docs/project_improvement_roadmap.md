@@ -48,7 +48,7 @@ v1.0.0  ──────── Current Baseline (research prototype complete)
    - `docs/thesis/06_implementation.md`: Spring Boot 3.2.3 -> 4.1.1, Solidity ^0.8.19 -> ^0.8.20
    - `contracts/phase8c_analysis/thesis_tables.md` Table 1: Spring Boot 3.2.3 -> 4.1.1, Solidity ^0.8.19 -> ^0.8.20
    - `contracts/analyze_phase8c.py`: Spring Boot 3.2.3 -> 4.1.1, Solidity ^0.8.19 -> ^0.8.20
-   - `docs/final_project_status.md`: 282 Files Scanned -> 302 Files Scanned (matching `security_scan_final.md`)
+   - `docs/final_project_status.md`: Clarified historical v1.0.0 scan (302 files) vs current v1.1.0 scan (317 files)
    - `docs/Review_2_TrustABAC_IoT_Slides.md`: Updated to Spring Boot 4.1.1 & Solidity 0.8.20
 
 2. **Configuration Alignment**:

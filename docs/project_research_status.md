@@ -219,7 +219,8 @@ Metrics collected per request sample:
 | Phase 7E Dashboard | 10/10 |
 | Phase 8C Validation | 45/45 |
 | Final Smoke Test | 15/15 |
-| Secret Scan | 302 files, 0 findings |
+| Secret Scan (v1.0.0 historical) | 302 files, 0 findings |
+| Secret Scan (v1.1.0 current) | 317 files, 0 findings |
 
 ---
 
@@ -292,7 +293,7 @@ Based on limitations identified in source and thesis Chapter 11:
 The following documentation and configuration alignments have been completed for v1.1.0:
 1. **Spring Boot Version**: Standardized to `4.1.1` across thesis chapters, checklist, and slide decks.
 2. **Solidity Version**: Standardized to `^0.8.20` in thesis tables and implementation chapters.
-3. **Security Scan Count**: Synchronized documentation to 302 files scanned (0 findings).
+3. **Security Scan Count**: Clarified historical v1.0.0 baseline (302 files scanned) vs current v1.1.0 release (317 files scanned, 0 findings).
 4. **Application Port**: Standardized `application.properties` default to `server.port=8090`.
 5. **Time Risk Configuration**: Explicitly documented that normal hours (00:00–24:00) produce zero time-risk contribution to isolate factors during the frozen Phase 8B campaign.
 6. **Docker Compose**: Dedicated to infrastructure (MySQL on host port 3307, Ganache on 8545, RabbitMQ on 5672/15672), with Spring Boot launched natively via `START_DEMO.bat`.
@@ -306,7 +307,7 @@ The following documentation and configuration alignments have been completed for
 Full prototype with 10 phases implemented, controlled experiment (720 samples), thesis documentation, demo scripts, v1.0.0 tag preserved.
 
 ### v1.1.0 (Stabilization Milestone — Completed)
-- Documentation consistency fixes (Spring Boot 4.1.1, Solidity ^0.8.20, Security scan 302 files)
+- Documentation consistency fixes (Spring Boot 4.1.1, Solidity ^0.8.20, Security scan: 302 baseline / 317 current)
 - Application and MySQL port standardization (8090, 3307)
 - Infrastructure Docker Compose cleanup
 - Experiment and test script container name corrections

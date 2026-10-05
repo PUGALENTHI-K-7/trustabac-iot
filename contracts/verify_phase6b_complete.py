@@ -324,7 +324,7 @@ def main():
 
     # Step 4.2: Stop Ganache
     print("\n  [Step 4.2] Stopping Ganache Docker container (simulating outage)...")
-    subprocess.run(["docker", "stop", "ganache-trustabac"], check=True, capture_output=True)
+    subprocess.run(["docker", "stop", "trustabac-ganache"], check=True, capture_output=True)
     time.sleep(3)
 
     # Verify Ganache is stopped
@@ -346,7 +346,7 @@ def main():
 
     # Step 4.3: Restart Ganache
     print("\n  [Step 4.3] Restarting Ganache Docker container...")
-    subprocess.run(["docker", "start", "ganache-trustabac"], check=True, capture_output=True)
+    subprocess.run(["docker", "start", "trustabac-ganache"], check=True, capture_output=True)
     time.sleep(5)
 
     # Step 4.4: Verify recovery
